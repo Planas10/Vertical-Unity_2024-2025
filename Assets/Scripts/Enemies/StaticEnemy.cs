@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
-public class StaticEnemy : MonoBehaviour
+public class StaticEnemy : BaseEnemy
 {
     public float rotationSpeed = 2f;
-    public float targetAngle = 45f;
+    private float targetAngle;
 
     private Quaternion startRotation;
     private Quaternion targetRotation;
@@ -14,13 +14,20 @@ public class StaticEnemy : MonoBehaviour
 
     void Start()
     {
+        targetAngle = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z).y - 45f;
         startRotation = transform.rotation;
         targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
     }
 
     void Update()
     {
-        Look();
+        if (CheckPlayer()) {
+            PlayerSpotted();
+        }
+        if (!PlayerDetected)
+        {
+            Look();
+        }
     }
 
     private void Look() {
@@ -34,5 +41,10 @@ public class StaticEnemy : MonoBehaviour
         else if (Quaternion.Angle(transform.rotation, startRotation) < 1f && !rotatingToTarget){
             rotatingToTarget = true;
         }
+    }
+
+    public override void PlayerSpotted()
+    {
+        base.PlayerSpotted();
     }
 }
