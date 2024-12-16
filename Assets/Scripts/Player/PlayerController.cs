@@ -19,17 +19,26 @@ public class PlayerController : MonoBehaviour
 
     private bool _isCrouched;
 
+    public float _hookCooldown;
+    public float _hookRange;
+
+    private float xRotation;
+    private float yRotation;
+
+    private bool _grappling;
+
     public Transform _crouchTransform;
     private Vector3 _crouchPosition;
     private Vector3 _standPosition;
 
 
-    public float _jumpForce = 10f;
-    private Vector3 _direction;
+    public float _jumpForce = 12f;
 
+    private Coroutine _hookCoroutine;
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         _standPosition = _cam.transform.localPosition;
         _crouchPosition = _crouchTransform.localPosition;
         _inputs = GetComponent<PlayerInput>();
@@ -45,21 +54,35 @@ public class PlayerController : MonoBehaviour
             Crouch();
         }
         Jump();
+        Hook();
     }
+
+    private void LateUpdate()
+    {
+        var lookDirection = _inputs.actions["CamMovment"].ReadValue<Vector2>();
+        var mouse = lookDirection * Time.deltaTime * 20f;
+
+        this.xRotation -= mouse.y;
+        this.yRotation += mouse.x;
+        this.xRotation = Mathf.Clamp(this.xRotation, -45f, 60f);
+
+        _cam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
+    }
+
+    //Movimiento WASD
     private void HorizontalMovement (){
         Vector2 movementInput = _inputs.actions["Move"].ReadValue<Vector2>();
-        if (movementInput != Vector2.zero) {
-
-            if (_inputs.actions["Run"].IsPressed()) {
-                _speed = 10f;
-            }
-            else {
-                _speed = 5f;
-            }
-            _direction = new Vector3(movementInput.x * _speed, _rb.velocity.y, movementInput.y * _speed);
-
-            _rb.velocity = _direction;
+        if (_inputs.actions["Run"].IsPressed() && !_isCrouched)
+        {
+            _speed = 10f;
         }
+        else
+        {
+            _speed = 5f;
+        }
+        Vector3 direction = (movementInput.x * _cam.transform.right + movementInput.y * _cam.transform.forward).normalized;
+        direction = new Vector3(direction.x * _speed, _rb.velocity.y, direction.z * _speed);
+        _rb.velocity = direction;
     }
 
     private void Jump()
@@ -74,6 +97,12 @@ public class PlayerController : MonoBehaviour
             else if (!_doubleJump) {
                 _doubleJump = true;
                 _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+            }
+            if (_grappling)
+            {
+                StopCoroutine(_hookCoroutine);
+                CancelGrappleState();
+                _grappling = false;
             }
         }
     }
@@ -96,12 +125,70 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void Hook() {
+        if (_inputs.actions["Hook"].WasPressedThisFrame()){
+            RaycastHit hit;
+            if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _hookRange)) {
+                if (hit.collider.CompareTag("Grappable")) {
+                    _doubleJump = false;
+                    _grappling = true;
+                    _grounded = false;
+                    _rb.velocity = Vector3.zero;
+                    _rb.useGravity = false;
+                    _rb.drag = 0;
+                    Vector3 adjustedPos = hit.point + Vector3.up * 3;
+                    _rb.AddRelativeForce(adjustedPos - transform.position, ForceMode.Impulse);
+                    if (_hookCoroutine != null)
+                    {
+                        StopCoroutine(_hookCoroutine);
+                    }
+                    _hookCoroutine = StartCoroutine(HookGravity(adjustedPos));
+                }
+            }
+        }
+    }
+
+    private void CancelGrappleState() {
+        _rb.useGravity = true;
+        _rb.drag = 0.3f;
+        _rb.velocity *= 0.5f;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Floor")) {
+        if (collision.gameObject.CompareTag("Floor"))
+        {
             _grounded = true;
             _doubleJump = false;
             _rb.drag = 3;
         }
+        if (_grappling)
+        {
+            StopCoroutine(_hookCoroutine);
+            CancelGrappleState();
+            _grappling = false;
+        }
+
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Floor"))
+        {
+            _grounded = false;
+            if (!_grappling)
+            {
+                _rb.drag = 0.3f;
+            }
+        }
+    }
+
+    private IEnumerator HookGravity(Vector3 _destination) {
+        yield return null;
+        while (Vector3.Distance(transform.position, _destination) > 5)
+        {
+            yield return null;
+        }
+        CancelGrappleState();
     }
 }

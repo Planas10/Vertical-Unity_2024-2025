@@ -256,6 +256,17 @@
                     "action": "CamMovment",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f32144a0-a7c9-4d9c-b490-a955f872cecc",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CamMovment",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

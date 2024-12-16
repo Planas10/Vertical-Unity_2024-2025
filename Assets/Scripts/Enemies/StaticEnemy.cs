@@ -8,26 +8,42 @@ public class StaticEnemy : BaseEnemy
     public float rotationSpeed = 2f;
     private float targetAngle;
 
+    private Vector3 _startpos;
+
     private Quaternion startRotation;
     private Quaternion targetRotation;
     private bool rotatingToTarget = true;
 
     void Start()
     {
-        targetAngle = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z).y - 45f;
-        startRotation = transform.rotation;
-        targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
+        _startpos = transform.position;
+        BeginRotation();
     }
 
     void Update()
     {
-        if (CheckPlayer()) {
+        if (CheckPlayer())
+        {
             PlayerSpotted();
         }
-        if (!PlayerDetected)
+        else {
+            if (PlayerDetected) {
+                PlayerDetected = false;
+                _IA.SetDestination(_startpos);
+            }
+        }
+        if (!PlayerDetected && Vector3.Distance(transform.position, _startpos) < 0.1f)
         {
             Look();
         }
+    }
+
+    private void BeginRotation() {
+        targetAngle = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z).y - 60f;
+        startRotation = transform.rotation;
+        targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
+
+        Debug.Log(targetRotation);
     }
 
     private void Look() {
