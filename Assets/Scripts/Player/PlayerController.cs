@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public PlayerInput _inputs;
     private Rigidbody _rb;
     private CapsuleCollider _cC;
+    public LineRenderer _lr;
 
     public float _speed = 0.05f;
     public bool _grounded = true;
@@ -28,6 +29,7 @@ public class PlayerController : MonoBehaviour
     private bool _grappling;
 
     public Transform _crouchTransform;
+    public Transform HookSpawn;
     private Vector3 _crouchPosition;
     private Vector3 _standPosition;
 
@@ -69,7 +71,7 @@ public class PlayerController : MonoBehaviour
         _cam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
     }
 
-    //Movimiento WASD
+    //Movimiento horizontal
     private void HorizontalMovement (){
         Vector2 movementInput = _inputs.actions["Move"].ReadValue<Vector2>();
         if (_inputs.actions["Run"].IsPressed() && !_isCrouched)
@@ -84,22 +86,26 @@ public class PlayerController : MonoBehaviour
         direction = new Vector3(direction.x * _speed, _rb.velocity.y, direction.z * _speed);
         _rb.velocity = direction;
     }
-
+    //Salto
     private void Jump()
     {
         if (_inputs.actions["Jump"].WasPressedThisFrame()) {
+            //Si esta en el suelo
             if (_grounded)
             {
                 _grounded = false;
                 _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
                 _rb.drag = 0.3f;
             }
+            //Si no ha usado doble salto
             else if (!_doubleJump) {
                 _doubleJump = true;
                 _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
             }
+            //Si esta usando el gancho
             if (_grappling)
             {
+                _lr.SetPosition(0, HookSpawn.position);
                 StopCoroutine(_hookCoroutine);
                 CancelGrappleState();
                 _grappling = false;
@@ -107,10 +113,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Agacharse
     private void Crouch() {
         if (_inputs.actions["Crouch"].WasPressedThisFrame()) { 
             if (_isCrouched){
+                //Si esta agachado no se puede correr
                 RaycastHit hit;
+                //Si no puede levantarse no se levanta
                 if (Physics.Raycast(transform.position, Vector3.up, out hit, 1.5f)){ return; }               
                 _cC.height = 2;
                 _cC.center = new Vector3(0, 0, 0);
@@ -125,18 +134,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Gancho
     private void Hook() {
         if (_inputs.actions["Hook"].WasPressedThisFrame()){
             RaycastHit hit;
             if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _hookRange)) {
                 if (hit.collider.CompareTag("Grappable")) {
+                    //Cambiar lo necesario para asegurar un movimiento fluido durante el gancho
+                    _lr.enabled = true;
                     _doubleJump = false;
                     _grappling = true;
                     _grounded = false;
                     _rb.velocity = Vector3.zero;
                     _rb.useGravity = false;
                     _rb.drag = 0;
-                    Vector3 adjustedPos = hit.point + Vector3.up * 3;
+                    Vector3 adjustedPos = hit.point + Vector3.up * 1;
                     _rb.AddRelativeForce(adjustedPos - transform.position, ForceMode.Impulse);
                     if (_hookCoroutine != null)
                     {
@@ -148,12 +160,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Cancelar el movimiento de gancho saltando mientras te arrastra
     private void CancelGrappleState() {
+        _lr.enabled = false;
         _rb.useGravity = true;
         _rb.drag = 0.3f;
         _rb.velocity *= 0.5f;
     }
 
+    //Gestor de colisiones
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Floor"))
@@ -164,6 +179,7 @@ public class PlayerController : MonoBehaviour
         }
         if (_grappling)
         {
+            _lr.enabled = false;
             StopCoroutine(_hookCoroutine);
             CancelGrappleState();
             _grappling = false;
@@ -183,9 +199,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //Corutina para el gancho
     private IEnumerator HookGravity(Vector3 _destination) {
         yield return null;
-        while (Vector3.Distance(transform.position, _destination) > 5)
+        while (Vector3.Distance(transform.position, _destination) > 1)
         {
             yield return null;
         }
