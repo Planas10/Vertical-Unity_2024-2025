@@ -42,8 +42,6 @@ public class StaticEnemy : BaseEnemy
         targetAngle = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z).y - 60f;
         startRotation = transform.rotation;
         targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
-
-        Debug.Log(targetRotation);
     }
 
     private void Look() {

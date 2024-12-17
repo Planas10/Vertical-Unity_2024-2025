@@ -15,16 +15,16 @@ public class BaseEnemy : MonoBehaviour
     public float DetectHeight;
 
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + transform.forward);
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, transform.position + (transform.forward + transform.right) * 5f);
-        Gizmos.DrawLine(transform.position, transform.position + (transform.forward - transform.right) * 5f);
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(transform.position, PlayerPos.position);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawLine(transform.position, transform.position + transform.forward);
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawLine(transform.position, transform.position + (transform.forward + transform.right) * 5f);
+    //    Gizmos.DrawLine(transform.position, transform.position + (transform.forward - transform.right) * 5f);
+    //    Gizmos.color = Color.green;
+    //    Gizmos.DrawLine(transform.position, PlayerPos.position);
+    //}
     private bool CheckAngle() {
 
         Vector3 Direction = transform.forward;

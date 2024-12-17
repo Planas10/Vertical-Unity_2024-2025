@@ -45,7 +45,6 @@ public class PatrolEnemy : BaseEnemy
             else{
                 _currentPoint = 0;
             }
-            Debug.Log(_currentPoint);
             _IA.SetDestination(waypoints[_currentPoint].position);
         }
     }
