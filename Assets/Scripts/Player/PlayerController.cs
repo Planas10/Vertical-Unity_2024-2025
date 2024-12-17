@@ -69,6 +69,10 @@ public class PlayerController : MonoBehaviour
         this.xRotation = Mathf.Clamp(this.xRotation, -45f, 60f);
 
         _cam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
+        if (_grappling)
+        {
+            _lr.SetPosition(0, HookSpawn.position);
+        }
     }
 
     //Movimiento horizontal
@@ -105,7 +109,6 @@ public class PlayerController : MonoBehaviour
             //Si esta usando el gancho
             if (_grappling)
             {
-                _lr.SetPosition(0, HookSpawn.position);
                 StopCoroutine(_hookCoroutine);
                 CancelGrappleState();
                 _grappling = false;
@@ -142,6 +145,7 @@ public class PlayerController : MonoBehaviour
                 if (hit.collider.CompareTag("Grappable")) {
                     //Cambiar lo necesario para asegurar un movimiento fluido durante el gancho
                     _lr.enabled = true;
+                    _lr.SetPosition(1, hit.point);
                     _doubleJump = false;
                     _grappling = true;
                     _grounded = false;

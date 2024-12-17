@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5044565714794566943}
   m_Layer: 0
   m_Name: middleFloorCollider
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -65,7 +65,7 @@ GameObject:
   - component: {fileID: 7920555453298132650}
   m_Layer: 0
   m_Name: lowFloorCollider
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 7312621263397523323}
   m_Layer: 0
   m_Name: highFloorColider
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
