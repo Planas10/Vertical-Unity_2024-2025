@@ -11,6 +11,8 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] private GameObject PauseSettingsCanvas;
     [SerializeField] private GameObject HowToPlayCanvas;
 
+    public AudioSource _buttonSound;
+
     public bool gameIsPaused = false;
 
     private void Awake()
@@ -33,6 +35,7 @@ public class CanvasManager : MonoBehaviour
     }
 
     public void HowToPlay() {
+        _buttonSound.Play();
         HowToPlayCanvas.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         gameIsPaused = true;
@@ -40,12 +43,14 @@ public class CanvasManager : MonoBehaviour
 
     public void PauseGame()
     {
+        _buttonSound.Play();
         PauseCanvas.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         gameIsPaused = true;
     }
 
     public void CloseHTP() {
+        _buttonSound.Play();
         HowToPlayCanvas.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         gameIsPaused = false;
@@ -53,6 +58,7 @@ public class CanvasManager : MonoBehaviour
 
     public void ResumeGame()
     {
+        _buttonSound.Play();
         gameIsPaused = false;
         PauseCanvas.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
@@ -60,18 +66,21 @@ public class CanvasManager : MonoBehaviour
 
     public void PauseSettingsButton()
     {
+        _buttonSound.Play();
         PauseSettingsCanvas.SetActive(true);
         PauseCanvas.SetActive(false);
     }
 
     public void PauseSettingsReturn()
     {
+        _buttonSound.Play();
         PauseSettingsCanvas.SetActive(false);
         PauseCanvas.SetActive(true);
     }
 
     public void PauseMainMenu()
     {
+        _buttonSound.Play();
         SceneManager.LoadScene("MainMenu");
     }
 }

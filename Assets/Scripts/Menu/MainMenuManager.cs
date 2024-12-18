@@ -8,7 +8,8 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject MainMenuCanvas;
     [SerializeField] private GameObject SettingsCanvas;
     [SerializeField] private GameObject CreditsCanvas;
-    [SerializeField] private GameObject LevelSelector;
+
+    public AudioSource _buttonSound;
 
 
     private void Awake()
@@ -16,49 +17,43 @@ public class MainMenuManager : MonoBehaviour
         SettingsCanvas.SetActive(false);
         CreditsCanvas.SetActive(false);
         MainMenuCanvas.SetActive(true);
-        LevelSelector.SetActive(false);
     }
     public void StartLevel1() {
+        _buttonSound.Play();
         SceneManager.LoadScene("Level1");
-    }
-
-    public void StartLevel2()
-    {
-        SceneManager.LoadScene("Level2");
     }
 
     public void StartSandbox()
     {
+        _buttonSound.Play();
         SceneManager.LoadScene("Sandbox");
-    }
-
-    public void GoToLevelSelector() {
-        MainMenuCanvas.SetActive(false);
-        LevelSelector.SetActive(true);
     }
 
     public void GoToMM()
     {
+        _buttonSound.Play();
         SettingsCanvas.SetActive(false);
-        LevelSelector.SetActive(false);
         CreditsCanvas.SetActive(false);
         MainMenuCanvas.SetActive(true);
     }
 
     public void GoToSettings()
     {
+        _buttonSound.Play();
         SettingsCanvas.SetActive(true);
         MainMenuCanvas.SetActive(false);
     }
 
     public void GoToCredits()
     {
+        _buttonSound.Play();
         CreditsCanvas.SetActive(true);
         MainMenuCanvas.SetActive(false);
     }
 
     public void Exit()
     {
+        _buttonSound.Play();
         Application.Quit();
     }
 }

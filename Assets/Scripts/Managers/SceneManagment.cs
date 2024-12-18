@@ -11,6 +11,8 @@ public class SceneManagment : MonoBehaviour
 
     public GameObject _winLevelCanvas;
 
+    public AudioSource _buttonSound;
+
     private void Update()
     {
         if (_playerController.win)
@@ -26,13 +28,16 @@ public class SceneManagment : MonoBehaviour
     }
 
     public void GoToSandbox() {
+        _buttonSound.Play();
         SceneManager.LoadScene("Sandbox");
     }
 
     public void GoToMM() {
+        _buttonSound.Play();
         SceneManager.LoadScene("MainMenu");
     }
     public void Exit() {
+        _buttonSound.Play();
         Application.Quit();
     }
 }

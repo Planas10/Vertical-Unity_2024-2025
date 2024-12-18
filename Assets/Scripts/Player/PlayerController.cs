@@ -8,6 +8,10 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private CanvasManager _canvasManager;
 
+    public AudioSource _landSound;
+    public AudioSource _hookSound;
+    public AudioSource _jumpSound;
+
     public Camera _cam;
     public PlayerInput _inputs;
     public LineRenderer _lr;
@@ -29,6 +33,8 @@ public class PlayerController : MonoBehaviour
     private float xRotation;
     private float yRotation;
 
+    public bool _falling;
+
     private bool _grappling;
 
     private Vector3 _checkpoint;
@@ -38,8 +44,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 _crouchPosition;
     private Vector3 _standPosition;
 
-    private bool _hasHook;
-    private bool _hasDoubleJump;
+    public bool _hasHook;
+    public bool _hasDoubleJump;
 
     public float _jumpForce;
 
@@ -60,9 +66,10 @@ public class PlayerController : MonoBehaviour
         reset = false;
         atrapado = false;
 
+        _hasHook = true;
+        _hasDoubleJump = true;
+
         win = false;
-        _hasDoubleJump = false;
-        _hasHook = false;
         Cursor.lockState = CursorLockMode.Locked;
         _checkpoint = transform.position;
         _standPosition = _cam.transform.localPosition;
@@ -70,6 +77,7 @@ public class PlayerController : MonoBehaviour
         _inputs = GetComponent<PlayerInput>();
         _rb = GetComponent<Rigidbody>();
         _cC = GetComponent<CapsuleCollider>();
+        CheckAvailable();
         if (!_hasHook)
         {
             _lr.enabled = false;
@@ -98,6 +106,14 @@ public class PlayerController : MonoBehaviour
             {
                 transform.position = _checkpoint;
             }
+        }
+    }
+
+    private void CheckAvailable() {
+        if (SceneManager.GetActiveScene().name == "Level1")
+        {
+            _hasDoubleJump = false;
+            _hasHook = false;
         }
     }
 
@@ -163,6 +179,7 @@ public class PlayerController : MonoBehaviour
             //Si esta en el suelo
             if (_grounded)
             {
+                _jumpSound.Play();
                 _hasJumped = true;
                 _grounded = false;
                 _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
@@ -170,12 +187,14 @@ public class PlayerController : MonoBehaviour
             }
             //Si no ha usado doble salto
             else if (!_doubleJump && _hasDoubleJump) {
+                _jumpSound.Play();
                 _doubleJump = true;
                 _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
             }
             //Si esta usando el gancho
             if (_grappling)
             {
+                _jumpSound.Play();
                 StopCoroutine(_hookCoroutine);
                 CancelGrappleState();
                 _grappling = false;
@@ -223,6 +242,7 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _hookRange)) {
                 if (hit.collider.CompareTag("Grappable")) {
+                    _hookSound.Play();
                     //Cambiar lo necesario para asegurar un movimiento fluido durante el gancho
                     _lr.enabled = true;
                     _lr.SetPosition(1, hit.point);
@@ -257,6 +277,11 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Floor"))
         {
+            if (_falling)
+            {
+                _landSound.Play();
+                _falling = false;
+            }
             _grounded = true;
             _hasJumped = false;
             _doubleJump = false;
@@ -276,6 +301,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Floor"))
         {
+            _falling = true;
             _grounded = false;
             if (!_grappling)
             {
@@ -288,6 +314,10 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Reseter") || other.gameObject.CompareTag("EnemyCapture"))
         {
+            if (SceneManager.GetActiveScene().name == "Sandbox")
+            {
+                SceneManager.LoadScene("Sandbox");
+            }
             transform.position = _checkpoint;
         }
         if (other.gameObject.CompareTag("Checkpoint"))
