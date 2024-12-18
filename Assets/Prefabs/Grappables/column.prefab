@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &9054956931257080790
 Transform:
@@ -68,7 +68,7 @@ GameObject:
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3209726521830658151
 Transform:
@@ -104,8 +104,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.49861145, y: 0.24608725, z: 0.49953717}
-  m_Center: {x: -0.001467387, y: 0.11967477, z: 0.002820333}
+  m_Size: {x: 0.3, y: 0.7, z: 0.3}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &4581699510272882809
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +123,7 @@ GameObject:
   m_TagString: Grappable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1493389838366561938
 Transform:

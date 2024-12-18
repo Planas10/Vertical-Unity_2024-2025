@@ -14,6 +14,8 @@ public class StaticEnemy : BaseEnemy
     private Quaternion targetRotation;
     private bool rotatingToTarget = true;
 
+    public CanvasManager _canvasManager;
+
     void Start()
     {
         _startpos = transform.position;
@@ -22,24 +24,36 @@ public class StaticEnemy : BaseEnemy
 
     void Update()
     {
-        if (CheckPlayer())
+        if (!_canvasManager.gameIsPaused)
         {
-            PlayerSpotted();
-        }
-        else {
-            if (PlayerDetected) {
-                PlayerDetected = false;
-                _IA.SetDestination(_startpos);
+            if (_IA.isStopped)
+            {
+                _IA.isStopped = false;
+            }
+            if (CheckPlayer())
+            {
+                PlayerSpotted();
+            }
+            else
+            {
+                if (PlayerDetected)
+                {
+                    PlayerDetected = false;
+                    _IA.SetDestination(_startpos);
+                }
+            }
+            if (!PlayerDetected && Vector3.Distance(transform.position, _startpos) < 0.1f)
+            {
+                Look();
             }
         }
-        if (!PlayerDetected && Vector3.Distance(transform.position, _startpos) < 0.1f)
-        {
-            Look();
+        else {
+            _IA.isStopped = true;
         }
     }
 
     private void BeginRotation() {
-        targetAngle = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z).y - 60f;
+        targetAngle = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z).y - 45f;
         startRotation = transform.rotation;
         targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
     }

@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private PauseManager _pauseManager;
+    [SerializeField] private CanvasManager _canvasManager;
 
     public Camera _cam;
     public PlayerInput _inputs;
@@ -31,46 +31,79 @@ public class PlayerController : MonoBehaviour
 
     private bool _grappling;
 
+    private Vector3 _checkpoint;
+
     public Transform _crouchTransform;
     public Transform HookSpawn;
     private Vector3 _crouchPosition;
     private Vector3 _standPosition;
 
-    private bool _hasHook = true;
-    private bool _hasDoubleJump = true;
+    private bool _hasHook;
+    private bool _hasDoubleJump;
 
-    public float _jumpForce = 12f;
+    public float _jumpForce;
 
     private Coroutine _hookCoroutine;
 
+    public bool reset;
+    public bool hidden;
+    public bool atrapado;
+
+    public bool win;
+
+    private const float Coyote_Time = 0.5f;
+    private float timeSinceLastGroundTouch = Mathf.Infinity;
+    public bool _hasJumped;
+
     private void Awake()
     {
-        CheckAvailable();
+        reset = false;
+        atrapado = false;
+
+        win = false;
+        _hasDoubleJump = false;
+        _hasHook = false;
         Cursor.lockState = CursorLockMode.Locked;
+        _checkpoint = transform.position;
         _standPosition = _cam.transform.localPosition;
         _crouchPosition = _crouchTransform.localPosition;
         _inputs = GetComponent<PlayerInput>();
         _rb = GetComponent<Rigidbody>();
         _cC = GetComponent<CapsuleCollider>();
+        if (!_hasHook)
+        {
+            _lr.enabled = false;
+        }
     }
 
     private void Update()
     {
-        if (!_pauseManager.gameIsPaused)
+        if (!_canvasManager.gameIsPaused)
         {
             if (_grounded)
             {
                 HorizontalMovement();
                 Crouch();
             }
+            CheckCoyoteTime();
             Jump();
             Hook();
+            CheckHidden();
+
+            if (_inputs.actions["AntiGroundBug"].WasPressedThisFrame())
+            {
+                _grounded = true;
+            }
+            if (_inputs.actions["GoToStart"].WasPressedThisFrame())
+            {
+                transform.position = _checkpoint;
+            }
         }
     }
 
     private void LateUpdate()
     {
-        if (!_pauseManager.gameIsPaused)
+        if (!_canvasManager.gameIsPaused)
         {
 
             var lookDirection = _inputs.actions["CamMovment"].ReadValue<Vector2>();
@@ -88,11 +121,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //Check available
-    private void CheckAvailable() {
-        if (SceneManager.GetActiveScene().name == "Level1") {
-            _hasDoubleJump = false;
-            _hasHook = false;
+    //Coyote time
+    private void CheckCoyoteTime() {
+        if (_grounded)
+        {
+            timeSinceLastGroundTouch = 0f;
+        }
+        else {
+            if (timeSinceLastGroundTouch < Coyote_Time)
+            {
+                // "Run" coyote timer
+                timeSinceLastGroundTouch += Time.deltaTime;
+            }
+        }
+        if (timeSinceLastGroundTouch < Coyote_Time && !_hasJumped)
+        {
+            _grounded = true;
         }
     }
 
@@ -111,6 +155,7 @@ public class PlayerController : MonoBehaviour
         direction = new Vector3(direction.x * _speed, _rb.velocity.y, direction.z * _speed);
         _rb.velocity = direction;
     }
+    
     //Salto
     private void Jump()
     {
@@ -118,6 +163,7 @@ public class PlayerController : MonoBehaviour
             //Si esta en el suelo
             if (_grounded)
             {
+                _hasJumped = true;
                 _grounded = false;
                 _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
                 _rb.drag = 0.3f;
@@ -155,6 +201,19 @@ public class PlayerController : MonoBehaviour
                 _cam.transform.localPosition = _crouchPosition;
             }
             _isCrouched = !_isCrouched;
+        }
+    }
+
+    //Comprovar si el jugador esta agachado bajo algo que puede esconderlo
+    private void CheckHidden() {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.up, out hit, 1.5f) && _isCrouched)
+        {
+            hidden = true;
+        }
+        else
+        {
+            hidden = false;
         }
     }
 
@@ -199,6 +258,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Floor"))
         {
             _grounded = true;
+            _hasJumped = false;
             _doubleJump = false;
             _rb.drag = 3;
         }
@@ -221,6 +281,22 @@ public class PlayerController : MonoBehaviour
             {
                 _rb.drag = 0.3f;
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Reseter") || other.gameObject.CompareTag("EnemyCapture"))
+        {
+            transform.position = _checkpoint;
+        }
+        if (other.gameObject.CompareTag("Checkpoint"))
+        {
+            _checkpoint = other.transform.position;
+        }
+        if (other.gameObject.CompareTag("WinCondition"))
+        {
+            win = true;
         }
     }
 

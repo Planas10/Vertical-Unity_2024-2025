@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class BaseEnemy : MonoBehaviour
 {
+    public PlayerController playerController;
+
     public Transform PlayerPos;
     public NavMeshAgent _IA;
 
@@ -14,17 +16,7 @@ public class BaseEnemy : MonoBehaviour
     public float DetectDistance;
     public float DetectHeight;
 
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + transform.forward);
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, transform.position + (transform.forward + transform.right) * 5f);
-        Gizmos.DrawLine(transform.position, transform.position + (transform.forward - transform.right) * 5f);
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(transform.position, PlayerPos.position);
-    }
+    //calcular el angulo de vision
     private bool CheckAngle() {
 
         Vector3 Direction = transform.forward;
@@ -39,16 +31,15 @@ public class BaseEnemy : MonoBehaviour
         else {
             return true;
         }
-
-
     }
 
+    //comprovar si el jugador esta dentro del rango de vision
     protected bool CheckPlayer() {
 
         RaycastHit hit;
         if (Physics.Raycast(transform.position, PlayerPos.position - transform.position, out hit, DetectDistance, 3))
         {
-            if (hit.collider.gameObject.CompareTag("Obstacle"))
+            if (hit.collider.gameObject.CompareTag("Obstacle") || playerController.hidden)
             {
                 return false;
             }
@@ -56,6 +47,7 @@ public class BaseEnemy : MonoBehaviour
         return CheckAngle() && CheckDistance();
     }
 
+    //comprovar la distancia entre el jugador y el enemigo asi como la diferencia de altura
     private bool CheckDistance()
     {
         return Vector3.Distance(transform.position, PlayerPos.position) <= DetectDistance && Mathf.Abs(transform.position.y - PlayerPos.position.y) < DetectHeight;
@@ -66,15 +58,16 @@ public class BaseEnemy : MonoBehaviour
         PlayerDetected = true;
     }
 
+    //persecucion del jugador
     public IEnumerator ChasePlayer() {
         yield return null;
         while (PlayerDetected) {
             yield return new WaitForSeconds(0.2f);
             if (CheckDistance())
             {
-                if (Vector3.Distance(transform.position, PlayerPos.position) < 3)
+                if (Vector3.Distance(transform.position, PlayerPos.position) < 1)
                 {
-                    Debug.Log("atrapado");
+                
                 }
                 else { 
                     _IA.SetDestination(PlayerPos.position);

@@ -8,6 +8,9 @@ TagManager:
   - Grappable
   - Obstacle
   - WinCondition
+  - Reseter
+  - Checkpoint
+  - EnemyCapture
   layers:
   - Default
   - TransparentFX

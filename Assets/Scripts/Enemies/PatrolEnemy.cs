@@ -5,33 +5,42 @@ using UnityEngine.AI;
 
 public class PatrolEnemy : BaseEnemy
 {
-
-    public Transform _startPos;
-    public Transform _endPos;
-
     public List<Transform> waypoints;
 
     private int _currentPoint = 0;
 
+    public CanvasManager _canvasManager;
+
     void Update()
     {
-        if (CheckPlayer())
+        if (!_canvasManager.gameIsPaused)
         {
-            PlayerSpotted();
+            if (_IA.isStopped)
+            {
+                _IA.isStopped = false;
+            }
+            if (CheckPlayer())
+            {
+                PlayerSpotted();
+            }
+            else
+            {
+                if (PlayerDetected)
+                {
+                    PlayerDetected = false;
+                    _IA.isStopped = false;
+                    _IA.speed = 3.5f;
+                    _IA.SetDestination(waypoints[_currentPoint].position);
+                }
+            }
+            if (!PlayerDetected)
+            {
+                Patrol();
+            }
         }
         else
         {
-            if (PlayerDetected)
-            {
-                PlayerDetected = false;
-                _IA.isStopped = false;
-                _IA.speed = 3.5f;
-                _IA.SetDestination(waypoints[_currentPoint].position);
-            }
-        }
-        if (!PlayerDetected)
-        {
-            Patrol();
+            _IA.isStopped = true;
         }
     }
 
@@ -53,7 +62,7 @@ public class PatrolEnemy : BaseEnemy
         base.PlayerSpotted();
         if (PlayerDetected)
         {
-            _IA.speed = 4;
+            _IA.speed = 6;
         }
     }
 }
