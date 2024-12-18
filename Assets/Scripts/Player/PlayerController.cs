@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private PauseManager _pauseManager;
+
     public Camera _cam;
     public PlayerInput _inputs;
+    public LineRenderer _lr;
     private Rigidbody _rb;
     private CapsuleCollider _cC;
-    public LineRenderer _lr;
 
     public float _speed = 0.05f;
     public bool _grounded = true;
@@ -33,6 +36,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 _crouchPosition;
     private Vector3 _standPosition;
 
+    private bool _hasHook = true;
+    private bool _hasDoubleJump = true;
 
     public float _jumpForce = 12f;
 
@@ -40,6 +45,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        CheckAvailable();
         Cursor.lockState = CursorLockMode.Locked;
         _standPosition = _cam.transform.localPosition;
         _crouchPosition = _crouchTransform.localPosition;
@@ -50,28 +56,43 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (_grounded)
+        if (!_pauseManager.gameIsPaused)
         {
-            HorizontalMovement();
-            Crouch();
+            if (_grounded)
+            {
+                HorizontalMovement();
+                Crouch();
+            }
+            Jump();
+            Hook();
         }
-        Jump();
-        Hook();
     }
 
     private void LateUpdate()
     {
-        var lookDirection = _inputs.actions["CamMovment"].ReadValue<Vector2>();
-        var mouse = lookDirection * Time.deltaTime * 20f;
-
-        this.xRotation -= mouse.y;
-        this.yRotation += mouse.x;
-        this.xRotation = Mathf.Clamp(this.xRotation, -45f, 60f);
-
-        _cam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
-        if (_grappling)
+        if (!_pauseManager.gameIsPaused)
         {
-            _lr.SetPosition(0, HookSpawn.position);
+
+            var lookDirection = _inputs.actions["CamMovment"].ReadValue<Vector2>();
+            var mouse = lookDirection * Time.deltaTime * 20f;
+
+            this.xRotation -= mouse.y;
+            this.yRotation += mouse.x;
+            this.xRotation = Mathf.Clamp(this.xRotation, -45f, 60f);
+
+            _cam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
+            if (_grappling)
+            {
+                _lr.SetPosition(0, HookSpawn.position);
+            }
+        }
+    }
+
+    //Check available
+    private void CheckAvailable() {
+        if (SceneManager.GetActiveScene().name == "Level1") {
+            _hasDoubleJump = false;
+            _hasHook = false;
         }
     }
 
@@ -102,7 +123,7 @@ public class PlayerController : MonoBehaviour
                 _rb.drag = 0.3f;
             }
             //Si no ha usado doble salto
-            else if (!_doubleJump) {
+            else if (!_doubleJump && _hasDoubleJump) {
                 _doubleJump = true;
                 _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
             }
@@ -139,7 +160,7 @@ public class PlayerController : MonoBehaviour
 
     //Gancho
     private void Hook() {
-        if (_inputs.actions["Hook"].WasPressedThisFrame()){
+        if (_inputs.actions["Hook"].WasPressedThisFrame() && _hasHook){
             RaycastHit hit;
             if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _hookRange)) {
                 if (hit.collider.CompareTag("Grappable")) {

@@ -8,9 +8,23 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject MainMenuCanvas;
     [SerializeField] private GameObject SettingsCanvas;
     [SerializeField] private GameObject CreditsCanvas;
+    [SerializeField] private GameObject LevelSelector;
 
-    public void StartGame() {
-        SceneManager.LoadScene("Sandbox");
+
+    private void Awake()
+    {
+        SettingsCanvas.SetActive(false);
+        CreditsCanvas.SetActive(false);
+        MainMenuCanvas.SetActive(true);
+        LevelSelector.SetActive(false);
+    }
+    public void StartLevel1() {
+        SceneManager.LoadScene("Level1");
+    }
+
+    public void StartLevel2()
+    {
+        SceneManager.LoadScene("Level2");
     }
 
     public void StartSandbox()
@@ -18,9 +32,15 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene("Sandbox");
     }
 
+    public void GoToLevelSelector() {
+        MainMenuCanvas.SetActive(false);
+        LevelSelector.SetActive(true);
+    }
+
     public void GoToMM()
     {
         SettingsCanvas.SetActive(false);
+        LevelSelector.SetActive(false);
         CreditsCanvas.SetActive(false);
         MainMenuCanvas.SetActive(true);
     }
