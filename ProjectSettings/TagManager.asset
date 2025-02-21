@@ -11,6 +11,8 @@ TagManager:
   - Reseter
   - Checkpoint
   - EnemyCapture
+  - Interactable
+  - Wind
   layers:
   - Default
   - TransparentFX

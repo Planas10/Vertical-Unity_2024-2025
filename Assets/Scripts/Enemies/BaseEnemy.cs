@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class BaseEnemy : MonoBehaviour
 {
     public PlayerController playerController;
+    public LevelManager levelManager;
 
     public Transform PlayerPos;
     public NavMeshAgent _IA;
@@ -15,6 +16,11 @@ public class BaseEnemy : MonoBehaviour
     public bool PlayerDetected;
     public float DetectDistance;
     public float DetectHeight;
+
+    public float attackDistance = 1f;
+
+    public AudioSource _detectAudio;
+    public Animator _anim;
 
     //calcular el angulo de vision
     private bool CheckAngle() {
@@ -44,7 +50,14 @@ public class BaseEnemy : MonoBehaviour
                 return false;
             }
         }
-        return CheckAngle() && CheckDistance();
+        if (CheckAngle()) {
+            if (CheckDistance()) {
+                if(Vector3.Distance(transform.position, PlayerPos.position) <= attackDistance){
+                    levelManager.ResetPlayer();
+                }
+            }
+        }
+        return true;
     }
 
     //comprovar la distancia entre el jugador y el enemigo asi como la diferencia de altura
@@ -56,6 +69,7 @@ public class BaseEnemy : MonoBehaviour
     public virtual void PlayerSpotted() {
         _IA.SetDestination(PlayerPos.position);
         PlayerDetected = true;
+        _anim.SetBool("PlayerDetected", true);
     }
 
     //persecucion del jugador

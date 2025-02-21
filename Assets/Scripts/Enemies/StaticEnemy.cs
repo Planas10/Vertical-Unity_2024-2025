@@ -39,12 +39,15 @@ public class StaticEnemy : BaseEnemy
                 if (PlayerDetected)
                 {
                     PlayerDetected = false;
+                    _anim.SetBool("PlayerDetected", false);
+                    _anim.SetBool("Returning", true);
                     _IA.SetDestination(_startpos);
                 }
             }
             if (!PlayerDetected && Vector3.Distance(transform.position, _startpos) < 0.1f)
             {
                 Look();
+                _anim.SetBool("Returning", false);
             }
         }
         else {

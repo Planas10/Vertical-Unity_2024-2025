@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
@@ -15,12 +17,21 @@ public class PlayerController : MonoBehaviour
     public Camera _cam;
     public PlayerInput _inputs;
     public LineRenderer _lr;
-    private Rigidbody _rb;
+    //private Rigidbody _rb;
+
+    private CharacterController _cc;
     private CapsuleCollider _cC;
 
-    public float _speed = 0.05f;
+    public float _gravity;
+    public float _Mgravity;
+
+    public float _speed;
     public bool _grounded = true;
     public bool _doubleJump;
+
+    public bool _running;
+    public float _slideForce;
+    public bool _sliding;
 
     public float _crouchHeight;
     public float _crouchCenter;
@@ -29,6 +40,8 @@ public class PlayerController : MonoBehaviour
 
     public float _hookCooldown;
     public float _hookRange;
+
+    public float _interactRange;
 
     private float xRotation;
     private float yRotation;
@@ -39,13 +52,14 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 _checkpoint;
 
+    private Vector3 playerVelocity;
+
     public Transform _crouchTransform;
     public Transform HookSpawn;
     private Vector3 _crouchPosition;
     private Vector3 _standPosition;
 
     public bool _hasHook;
-    public bool _hasDoubleJump;
 
     public float _jumpForce;
 
@@ -67,7 +81,6 @@ public class PlayerController : MonoBehaviour
         atrapado = false;
 
         _hasHook = true;
-        _hasDoubleJump = true;
 
         win = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -75,9 +88,8 @@ public class PlayerController : MonoBehaviour
         _standPosition = _cam.transform.localPosition;
         _crouchPosition = _crouchTransform.localPosition;
         _inputs = GetComponent<PlayerInput>();
-        _rb = GetComponent<Rigidbody>();
+        _cc = GetComponent<CharacterController>();
         _cC = GetComponent<CapsuleCollider>();
-        CheckAvailable();
         if (!_hasHook)
         {
             _lr.enabled = false;
@@ -86,18 +98,42 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        
+        //Check if grounded
+        if ((_cc.collisionFlags & CollisionFlags.Below) != 0)
+        {
+            _grounded = true;
+        } else if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero) {
+            _grounded = false;
+            _falling = false;
+        }
+
+        if (_grounded && playerVelocity.y < 0) {
+            playerVelocity.y = 0f;
+        }
+
         if (!_canvasManager.gameIsPaused)
         {
-            if (_grounded)
+            if (!_grappling)
             {
                 HorizontalMovement();
-                Crouch();
+                Jump();
             }
+            if (_grounded)
+            {
+                if (!_running)
+                {
+                    Crouch();
+                }
+                else {
+                    Slide();
+                }
+            }
+            CheckInteractable();
             CheckCoyoteTime();
-            Jump();
             Hook();
             CheckHidden();
-
+            Interact();
             if (_inputs.actions["AntiGroundBug"].WasPressedThisFrame())
             {
                 _grounded = true;
@@ -106,22 +142,8 @@ public class PlayerController : MonoBehaviour
             {
                 transform.position = _checkpoint;
             }
-        }
-    }
 
-    private void CheckAvailable() {
-        if (SceneManager.GetActiveScene().name == "Level1")
-        {
-            _hasDoubleJump = false;
-            _hasHook = false;
-        }
-    }
-
-    private void LateUpdate()
-    {
-        if (!_canvasManager.gameIsPaused)
-        {
-
+            //variables sin tipo predefinido
             var lookDirection = _inputs.actions["CamMovment"].ReadValue<Vector2>();
             var mouse = lookDirection * Time.deltaTime * 20f;
 
@@ -146,7 +168,7 @@ public class PlayerController : MonoBehaviour
         else {
             if (timeSinceLastGroundTouch < Coyote_Time)
             {
-                // "Run" coyote timer
+                //coyote timer
                 timeSinceLastGroundTouch += Time.deltaTime;
             }
         }
@@ -158,18 +180,24 @@ public class PlayerController : MonoBehaviour
 
     //Movimiento horizontal
     private void HorizontalMovement (){
-        Vector2 movementInput = _inputs.actions["Move"].ReadValue<Vector2>();
+        if (_sliding) { return; }
         if (_inputs.actions["Run"].IsPressed() && !_isCrouched)
         {
-            _speed = 10f;
+            _speed = 7f;
+            _running = true;
         }
         else
         {
             _speed = 5f;
+            _running = false;
         }
-        Vector3 direction = (movementInput.x * _cam.transform.right + movementInput.y * _cam.transform.forward).normalized;
-        direction = new Vector3(direction.x * _speed, _rb.velocity.y, direction.z * _speed);
-        _rb.velocity = direction;
+        if (!_grounded && !_running && _cc.velocity.y < 0) {
+            _speed = 5f;
+        }
+        Vector3 MoveDirection = Quaternion.Euler(0f, _cam.transform.eulerAngles.y, 0f) * new Vector3(Input.GetAxis("Horizontal"), _Mgravity, Input.GetAxis("Vertical"));
+        MoveDirection = new Vector3(MoveDirection.x, _Mgravity, MoveDirection.z);
+        MoveDirection = transform.TransformDirection(MoveDirection);
+        _cc.Move(MoveDirection * _speed * Time.deltaTime);
     }
     
     //Salto
@@ -180,26 +208,21 @@ public class PlayerController : MonoBehaviour
             if (_grounded)
             {
                 _jumpSound.Play();
+                playerVelocity.y += Mathf.Sqrt(_jumpForce * -2.0f * _gravity);
                 _hasJumped = true;
                 _grounded = false;
-                _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
-                _rb.drag = 0.3f;
-            }
-            //Si no ha usado doble salto
-            else if (!_doubleJump && _hasDoubleJump) {
-                _jumpSound.Play();
-                _doubleJump = true;
-                _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
             }
             //Si esta usando el gancho
             if (_grappling)
             {
                 _jumpSound.Play();
                 StopCoroutine(_hookCoroutine);
-                CancelGrappleState();
+
                 _grappling = false;
             }
         }
+        playerVelocity.y += _gravity * Time.deltaTime;
+        _cc.Move(playerVelocity * Time.deltaTime);
     }
 
     //Agacharse
@@ -210,17 +233,49 @@ public class PlayerController : MonoBehaviour
                 RaycastHit hit;
                 //Si no puede levantarse no se levanta
                 if (Physics.Raycast(transform.position, Vector3.up, out hit, 1.5f)){ return; }               
-                _cC.height = 2;
-                _cC.center = new Vector3(0, 0, 0);
+                _cc.height = 2;
+                _cc.center = new Vector3(0, 0, 0);
                 _cam.transform.localPosition = _standPosition;
             }
             else {
-                _cC.height = _crouchHeight;
-                _cC.center = new Vector3(0, _crouchCenter, 0);
+                _cc.height = _crouchHeight;
+                _cc.center = new Vector3(0, _crouchCenter, 0);
                 _cam.transform.localPosition = _crouchPosition;
             }
             _isCrouched = !_isCrouched;
         }
+    }
+
+    private void Slide() {
+        if (_inputs.actions["Crouch"].WasPressedThisFrame() && !_sliding && !_isCrouched) {
+            _sliding = true;
+            _cc.height = _crouchHeight;
+            _cc.center = new Vector3(0, _crouchCenter, 0);
+            _cam.transform.localPosition = _crouchPosition;
+            _isCrouched = true;
+            Vector3 MoveDirection = Quaternion.Euler(0f, _cam.transform.eulerAngles.y, 0f) * new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+            MoveDirection = transform.TransformDirection(MoveDirection);
+            _cc.Move(MoveDirection * (_speed * 2f) * Time.deltaTime);
+            StartCoroutine(SlideEnd());
+        }
+    }
+
+    private IEnumerator SlideEnd() {
+        float slideTime = 0.8f;
+        Vector3 MoveDirection = Quaternion.Euler(0f, _cam.transform.eulerAngles.y, 0f) * new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+        MoveDirection = transform.TransformDirection(MoveDirection);
+        while (slideTime > 0f) {
+            yield return null;
+            _cc.Move(MoveDirection * ((_speed * 5f) * slideTime) * Time.deltaTime);
+            slideTime -= Time.deltaTime;
+        }
+        _sliding = false;
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.up, out hit, 1.5f)) { yield break; }
+        _cc.height = 2;
+        _cc.center = new Vector3(0, 0, 0);
+        _cam.transform.localPosition = _standPosition;
+        _isCrouched = false;
     }
 
     //Comprovar si el jugador esta agachado bajo algo que puede esconderlo
@@ -243,33 +298,82 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _hookRange)) {
                 if (hit.collider.CompareTag("Grappable")) {
                     _hookSound.Play();
-                    //Cambiar lo necesario para asegurar un movimiento fluido durante el gancho
                     _lr.enabled = true;
                     _lr.SetPosition(1, hit.point);
                     _doubleJump = false;
                     _grappling = true;
-                    _grounded = false;
-                    _rb.velocity = Vector3.zero;
-                    _rb.useGravity = false;
-                    _rb.drag = 0;
-                    Vector3 adjustedPos = hit.point + Vector3.up * 1;
-                    _rb.AddRelativeForce(adjustedPos - transform.position, ForceMode.Impulse);
+                    Vector3 adjustedPos = hit.collider.transform.position + Vector3.up * 5;
+                    Vector3 direction = adjustedPos - transform.position;
+                    _cc.Move(direction * (_speed / 3f) * Time.deltaTime);
                     if (_hookCoroutine != null)
                     {
                         StopCoroutine(_hookCoroutine);
                     }
-                    _hookCoroutine = StartCoroutine(HookGravity(adjustedPos));
+                    _hookCoroutine = StartCoroutine(HookGravity(direction, adjustedPos));
                 }
             }
         }
     }
 
-    //Cancelar el movimiento de gancho saltando mientras te arrastra
-    private void CancelGrappleState() {
+    //Corutina para el gancho
+    private IEnumerator HookGravity(Vector3 _direction, Vector3 _destination)
+    {
+        float timerPostHook = 0.5f;
+        Vector3 DestinationInertia = _cam.transform.forward;
+        yield return null;
+        while (Vector3.Distance(transform.position, _destination) > 1)
+        {
+            _cc.Move(_direction * (_speed / 3f) * Time.deltaTime);
+            yield return null;
+        }
+        _grappling = false;
+        while (timerPostHook >= 0f) {
+            yield return null;
+            _cc.Move(DestinationInertia * _speed * Time.deltaTime);
+            timerPostHook -= Time.deltaTime;
+        }
+        //Cancelar el movimiento de gancho saltando mientras te arrastra
+        _cc.Move((_cc.velocity / 3f) * Time.deltaTime);
         _lr.enabled = false;
-        _rb.useGravity = true;
-        _rb.drag = 0.3f;
-        _rb.velocity *= 0.5f;
+        _grappling = false;
+    }
+
+    //Detectar interactuable
+    public bool CheckInteractable() {
+        RaycastHit hit;
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _interactRange))
+        {
+            if (hit.collider.CompareTag("Interactable"))
+            {
+                return true;
+            }
+            else { return false; }
+        }
+        else { return false; }
+    }
+
+    public GameObject placeholder;
+    public GameObject GetInteractable() {
+        RaycastHit hit;
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _interactRange))
+        {
+            if (hit.collider.CompareTag("Interactable"))
+            {
+                return hit.collider.gameObject;
+            }
+            else { return placeholder; }
+        }
+        else { return placeholder; }
+    }
+
+    //Funcion para los interactuables
+    public void Interact() {
+        if (_inputs.actions["Interact"].WasPressedThisFrame()) {
+            if(CheckInteractable() && !GetInteractable().GetComponent<Button>().activated) {
+                Debug.Log("Activate BTT");
+                GetInteractable().GetComponent<Button>().activated = true;
+            }
+        }
     }
 
     //Gestor de colisiones
@@ -282,16 +386,14 @@ public class PlayerController : MonoBehaviour
                 _landSound.Play();
                 _falling = false;
             }
-            _grounded = true;
             _hasJumped = false;
             _doubleJump = false;
-            _rb.drag = 3;
         }
         if (_grappling)
         {
             _lr.enabled = false;
             StopCoroutine(_hookCoroutine);
-            CancelGrappleState();
+            _cc.Move(Vector3.zero);
             _grappling = false;
         }
 
@@ -302,41 +404,26 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Floor"))
         {
             _falling = true;
-            _grounded = false;
             if (!_grappling)
             {
-                _rb.drag = 0.3f;
+                //_rb.drag = 0.3f;
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Reseter") || other.gameObject.CompareTag("EnemyCapture"))
+        if (other.gameObject.CompareTag("Wind"))
         {
-            if (SceneManager.GetActiveScene().name == "Sandbox")
-            {
-                SceneManager.LoadScene("Sandbox");
-            }
-            transform.position = _checkpoint;
-        }
-        if (other.gameObject.CompareTag("Checkpoint"))
-        {
-            _checkpoint = other.transform.position;
-        }
-        if (other.gameObject.CompareTag("WinCondition"))
-        {
-            win = true;
+            _Mgravity = -1f;
         }
     }
 
-    //Corutina para el gancho
-    private IEnumerator HookGravity(Vector3 _destination) {
-        yield return null;
-        while (Vector3.Distance(transform.position, _destination) > 1)
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Wind"))
         {
-            yield return null;
+            _Mgravity = 0f;
         }
-        CancelGrappleState();
     }
 }

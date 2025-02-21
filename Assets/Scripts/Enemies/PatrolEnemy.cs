@@ -28,6 +28,7 @@ public class PatrolEnemy : BaseEnemy
                 if (PlayerDetected)
                 {
                     PlayerDetected = false;
+                    _anim.SetBool("PlayerDetected", false);
                     _IA.isStopped = false;
                     _IA.speed = 3.5f;
                     _IA.SetDestination(waypoints[_currentPoint].position);
