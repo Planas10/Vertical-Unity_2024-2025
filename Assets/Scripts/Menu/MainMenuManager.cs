@@ -20,7 +20,7 @@ public class MainMenuManager : MonoBehaviour
     }
     public void StartLevel1() {
         _buttonSound.Play();
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Scene1");
     }
 
     public void StartSandbox()

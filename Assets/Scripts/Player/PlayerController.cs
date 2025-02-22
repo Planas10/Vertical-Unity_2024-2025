@@ -13,11 +13,12 @@ public class PlayerController : MonoBehaviour
     public AudioSource _landSound;
     public AudioSource _hookSound;
     public AudioSource _jumpSound;
+    public AudioSource _footStepSound;
+    public AudioSource _slideSound;
 
     public Camera _cam;
     public PlayerInput _inputs;
     public LineRenderer _lr;
-    //private Rigidbody _rb;
 
     private CharacterController _cc;
     private CapsuleCollider _cC;
@@ -98,13 +99,16 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        
         //Check if grounded
-        if ((_cc.collisionFlags & CollisionFlags.Below) != 0)
+        if ((_cc.collisionFlags & CollisionFlags.Below) != 0 && !_grounded)
         {
             _grounded = true;
+            if (_cc.velocity != Vector3.zero) {
+                _footStepSound.Play();
+            }
         } else if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero) {
             _grounded = false;
+            _footStepSound.Stop();
             _falling = false;
         }
 
@@ -121,6 +125,9 @@ public class PlayerController : MonoBehaviour
             }
             if (_grounded)
             {
+                if (_cc.velocity != Vector3.zero && _footStepSound.isPlaying) {
+                    _footStepSound.Stop();
+                }
                 if (!_running)
                 {
                     Crouch();
@@ -181,6 +188,9 @@ public class PlayerController : MonoBehaviour
     //Movimiento horizontal
     private void HorizontalMovement (){
         if (_sliding) { return; }
+        if (_inputs.actions["Move"].WasPressedThisFrame() && _grounded && _cc.velocity != Vector3.zero) {
+            _footStepSound.Play();
+        }
         if (_inputs.actions["Run"].IsPressed() && !_isCrouched)
         {
             _speed = 7f;
@@ -211,6 +221,7 @@ public class PlayerController : MonoBehaviour
                 playerVelocity.y += Mathf.Sqrt(_jumpForce * -2.0f * _gravity);
                 _hasJumped = true;
                 _grounded = false;
+                _footStepSound.Stop();
             }
             //Si esta usando el gancho
             if (_grappling)
@@ -249,6 +260,8 @@ public class PlayerController : MonoBehaviour
     private void Slide() {
         if (_inputs.actions["Crouch"].WasPressedThisFrame() && !_sliding && !_isCrouched) {
             _sliding = true;
+            _footStepSound.Stop();
+            _slideSound.Play();
             _cc.height = _crouchHeight;
             _cc.center = new Vector3(0, _crouchCenter, 0);
             _cam.transform.localPosition = _crouchPosition;
@@ -302,6 +315,8 @@ public class PlayerController : MonoBehaviour
                     _lr.SetPosition(1, hit.point);
                     _doubleJump = false;
                     _grappling = true;
+                    _grounded = false;
+                    _footStepSound.Stop();
                     Vector3 adjustedPos = hit.collider.transform.position + Vector3.up * 5;
                     Vector3 direction = adjustedPos - transform.position;
                     _cc.Move(direction * (_speed / 3f) * Time.deltaTime);
