@@ -103,9 +103,6 @@ public class PlayerController : MonoBehaviour
         if ((_cc.collisionFlags & CollisionFlags.Below) != 0 && !_grounded)
         {
             _grounded = true;
-            if (_cc.velocity != Vector3.zero) {
-                _footStepSound.Play();
-            }
         } else if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero) {
             _grounded = false;
             _footStepSound.Stop();
@@ -125,9 +122,6 @@ public class PlayerController : MonoBehaviour
             }
             if (_grounded)
             {
-                if (_cc.velocity != Vector3.zero && _footStepSound.isPlaying) {
-                    _footStepSound.Stop();
-                }
                 if (!_running)
                 {
                     Crouch();
@@ -208,6 +202,13 @@ public class PlayerController : MonoBehaviour
         MoveDirection = new Vector3(MoveDirection.x, _Mgravity, MoveDirection.z);
         MoveDirection = transform.TransformDirection(MoveDirection);
         _cc.Move(MoveDirection * _speed * Time.deltaTime);
+
+        if (_grounded && !_footStepSound.isPlaying && _cc.velocity != Vector3.zero)
+        {
+            _footStepSound.Play();
+        } else if (_grounded && _footStepSound.isPlaying && _cc.velocity == Vector3.zero) {
+            _footStepSound.Stop();
+        }
     }
     
     //Salto
@@ -385,7 +386,6 @@ public class PlayerController : MonoBehaviour
     public void Interact() {
         if (_inputs.actions["Interact"].WasPressedThisFrame()) {
             if(CheckInteractable() && !GetInteractable().GetComponent<Button>().activated) {
-                Debug.Log("Activate BTT");
                 GetInteractable().GetComponent<Button>().activated = true;
             }
         }

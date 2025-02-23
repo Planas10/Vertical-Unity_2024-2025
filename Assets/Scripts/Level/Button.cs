@@ -7,6 +7,8 @@ public class Button : MonoBehaviour
     public PlayerController pController;
     public Outline outlineScript;
 
+    public AudioSource activateBTT;
+
     public bool looked;
     public bool activated;
 
@@ -25,7 +27,7 @@ public class Button : MonoBehaviour
 
     public void ActivatedTime() {
         if (activated) {
-            Debug.Log("Start Timer");
+            activateBTT.Play();
             StartCoroutine(DoorTimer());
         }
     }
