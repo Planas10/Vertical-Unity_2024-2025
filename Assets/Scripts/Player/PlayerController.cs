@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviour
     //Movimiento horizontal
     private void HorizontalMovement (){
         if (_sliding) { return; }
-        if (_inputs.actions["Move"].WasPressedThisFrame() && _grounded && _cc.velocity != Vector3.zero) {
+        if (_inputs.actions["Move"].WasPressedThisFrame() && _grounded && _cc.velocity != Vector3.zero && !_footStepSound.isPlaying) {
             _footStepSound.Play();
         }
         if (_inputs.actions["Run"].IsPressed() && !_isCrouched)
