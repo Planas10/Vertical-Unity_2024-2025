@@ -14,6 +14,8 @@ public class StaticEnemy : BaseEnemy
     private Quaternion targetRotation;
     private bool rotatingToTarget = true;
 
+    public GameObject rotateTarget;
+
     public CanvasManager _canvasManager;
 
     void Start()
