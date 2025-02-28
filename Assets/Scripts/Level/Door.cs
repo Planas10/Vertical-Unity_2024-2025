@@ -12,6 +12,9 @@ public class Door : MonoBehaviour
     public AudioSource Open;
     public AudioSource Close;
 
+    private bool canPlayOpen;
+    private bool canPlayClose;
+
     private void Update()
     {
         StartAnimation();
@@ -23,12 +26,21 @@ public class Door : MonoBehaviour
             if(!wasActivated)
                 wasActivated = true;
             animator.SetBool("BTTactivated", button.activated);
-            Open.Play();
+            if (canPlayOpen)
+            {
+                canPlayOpen = false;
+                canPlayClose = true;
+                Open.Play();
+            }
         }
         else {
             if (wasActivated) {
                 animator.SetBool("BTTactivated", button.activated);
-                Close.Play();
+                if (canPlayClose) {
+                    canPlayClose = false;
+                    canPlayOpen = true;
+                    Close.Play();
+                }
                 wasActivated = false;
             }
         }

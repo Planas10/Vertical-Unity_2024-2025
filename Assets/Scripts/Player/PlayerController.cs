@@ -76,6 +76,10 @@ public class PlayerController : MonoBehaviour
     private float timeSinceLastGroundTouch = Mathf.Infinity;
     public bool _hasJumped;
 
+    public ParticleManager particlemanager;
+
+    RaycastHit groundHit;
+
     private void Awake()
     {
         reset = false;
@@ -100,10 +104,10 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         //Check if grounded
-        if ((_cc.collisionFlags & CollisionFlags.Below) != 0 && !_grounded)
+        if (/*(_cc.collisionFlags & CollisionFlags.Below) != 0 && !_grounded &&*/ Physics.Raycast(transform.position, Vector3.down, out groundHit, 2f))
         {
             _grounded = true;
-        } else if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero) {
+        } else /*if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero)*/ {
             _grounded = false;
             _footStepSound.Stop();
             _falling = false;
@@ -311,6 +315,7 @@ public class PlayerController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _hookRange)) {
                 if (hit.collider.CompareTag("Grappable")) {
+                    particlemanager.HookImpactParticle(hit.collider.transform.position);
                     _hookSound.Play();
                     _lr.enabled = true;
                     _lr.SetPosition(1, hit.point);

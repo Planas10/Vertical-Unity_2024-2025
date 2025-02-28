@@ -14,6 +14,8 @@ public class Button : MonoBehaviour
 
     public float timerBTT;
 
+    private bool canPlay;
+
     private void Update()
     {
         AlternateOutline();
@@ -27,7 +29,11 @@ public class Button : MonoBehaviour
 
     public void ActivatedTime() {
         if (activated) {
-            activateBTT.Play();
+            if (canPlay)
+            {
+                canPlay = false;
+                activateBTT.Play();
+            }
             StartCoroutine(DoorTimer());
         }
     }
@@ -35,5 +41,6 @@ public class Button : MonoBehaviour
     public IEnumerator DoorTimer() {
         yield return new WaitForSeconds(timerBTT);
         activated = false;
+        canPlay = true;
     }
 }
