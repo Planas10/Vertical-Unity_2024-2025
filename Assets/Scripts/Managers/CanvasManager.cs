@@ -7,11 +7,13 @@ public class CanvasManager : MonoBehaviour
 {
     public PlayerController _playercontroller;
 
-    [SerializeField] private GameObject PauseCanvas;
-    [SerializeField] private GameObject PauseSettingsCanvas;
-    [SerializeField] private GameObject HowToPlayCanvas;
+    public GameObject PauseCanvas;
+    public GameObject PauseSettingsCanvas;
+    public GameObject HowToPlayCanvas;
 
     public AudioSource _buttonSound;
+
+    public CanvasGroup damageCanvas;
 
     public bool gameIsPaused = false;
 
@@ -82,5 +84,19 @@ public class CanvasManager : MonoBehaviour
     {
         _buttonSound.Play();
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void ShowDamage() {
+        damageCanvas.alpha = 1;
+        StartCoroutine(ResetDamageCanvas());
+    }
+
+    public IEnumerator ResetDamageCanvas() {
+        float currentValue = 1;
+        while (currentValue > 0) {
+            currentValue -= Time.deltaTime;
+            damageCanvas.alpha = currentValue;
+            yield return null;
+        }
     }
 }

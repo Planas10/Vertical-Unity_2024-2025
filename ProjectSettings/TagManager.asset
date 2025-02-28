@@ -13,6 +13,7 @@ TagManager:
   - EnemyCapture
   - Interactable
   - Wind
+  - Grappable2
   layers:
   - Default
   - TransparentFX

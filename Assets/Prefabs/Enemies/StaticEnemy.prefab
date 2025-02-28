@@ -1202,6 +1202,7 @@ MonoBehaviour:
   attackDistance: 1
   _detectAudio: {fileID: 813459635413954804}
   _anim: {fileID: 1251692845721240464}
+  attackSpeed: 1
   rotationSpeed: 2
   rotateTarget: {fileID: 1251692845728641102}
   _canvasManager: {fileID: 0}

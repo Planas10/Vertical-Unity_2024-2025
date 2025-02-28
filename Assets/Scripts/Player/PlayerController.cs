@@ -8,7 +8,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private CanvasManager _canvasManager;
+    public CanvasManager _canvasManager;
+    public LevelManager _levelManager;
+    public ParticleManager particlemanager;
 
     public AudioSource _landSound;
     public AudioSource _hookSound;
@@ -76,9 +78,7 @@ public class PlayerController : MonoBehaviour
     private float timeSinceLastGroundTouch = Mathf.Infinity;
     public bool _hasJumped;
 
-    public ParticleManager particlemanager;
-
-    RaycastHit groundHit;
+    public int hitpoints = 3;
 
     private void Awake()
     {
@@ -104,10 +104,11 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         //Check if grounded
-        if (/*(_cc.collisionFlags & CollisionFlags.Below) != 0 && !_grounded &&*/ Physics.Raycast(transform.position, Vector3.down, out groundHit, 2f))
+        if ((_cc.collisionFlags & CollisionFlags.Below) != 0 && !_grounded)
         {
             _grounded = true;
-        } else /*if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero)*/ {
+        } else if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero)
+        {
             _grounded = false;
             _footStepSound.Stop();
             _falling = false;
@@ -314,7 +315,7 @@ public class PlayerController : MonoBehaviour
         if (_inputs.actions["Hook"].WasPressedThisFrame() && _hasHook){
             RaycastHit hit;
             if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _hookRange)) {
-                if (hit.collider.CompareTag("Grappable")) {
+                if (hit.collider.CompareTag("Grappable") || hit.collider.CompareTag("Grappable2")) {
                     particlemanager.HookImpactParticle(hit.collider.transform.position);
                     _hookSound.Play();
                     _lr.enabled = true;
@@ -323,21 +324,22 @@ public class PlayerController : MonoBehaviour
                     _grappling = true;
                     _grounded = false;
                     _footStepSound.Stop();
-                    Vector3 adjustedPos = hit.collider.transform.position + Vector3.up * 5;
+                    Vector3 posModifier = hit.collider.CompareTag("Grappable") ? Vector3.up * 5: Vector3.zero;
+                    Vector3 adjustedPos = hit.collider.transform.position + posModifier;
                     Vector3 direction = adjustedPos - transform.position;
                     _cc.Move(direction * (_speed / 3f) * Time.deltaTime);
                     if (_hookCoroutine != null)
                     {
                         StopCoroutine(_hookCoroutine);
                     }
-                    _hookCoroutine = StartCoroutine(HookGravity(direction, adjustedPos));
+                    _hookCoroutine = StartCoroutine(HookGravity(direction, adjustedPos, hit.collider.CompareTag("Grappable")));
                 }
             }
         }
     }
 
     //Corutina para el gancho
-    private IEnumerator HookGravity(Vector3 _direction, Vector3 _destination)
+    private IEnumerator HookGravity(Vector3 _direction, Vector3 _destination, bool movePostHook)
     {
         float timerPostHook = 0.5f;
         Vector3 DestinationInertia = _cam.transform.forward;
@@ -348,7 +350,7 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
         _grappling = false;
-        while (timerPostHook >= 0f) {
+        while (timerPostHook >= 0f && movePostHook) {
             yield return null;
             _cc.Move(DestinationInertia * _speed * Time.deltaTime);
             timerPostHook -= Time.deltaTime;
@@ -393,6 +395,17 @@ public class PlayerController : MonoBehaviour
             if(CheckInteractable() && !GetInteractable().GetComponent<Button>().activated) {
                 GetInteractable().GetComponent<Button>().activated = true;
             }
+        }
+    }
+
+    public void TakeDamage() {
+        hitpoints--;
+        if (hitpoints > 0)
+        {
+            _canvasManager.ShowDamage();
+        }
+        else {
+            _levelManager.ResetPlayer();
         }
     }
 

@@ -1250,11 +1250,12 @@ MonoBehaviour:
   PlayerPos: {fileID: 0}
   _IA: {fileID: 7072996100375829343}
   PlayerDetected: 0
-  DetectDistance: 10
+  DetectDistance: 15
   DetectHeight: 2
-  attackDistance: 1
+  attackDistance: 8
   _detectAudio: {fileID: 2844869780633325805}
   _anim: {fileID: 6600016973198210696}
+  attackSpeed: 3
   waypoints:
   - {fileID: 0}
   - {fileID: 0}

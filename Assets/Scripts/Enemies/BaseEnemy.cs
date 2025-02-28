@@ -17,10 +17,13 @@ public class BaseEnemy : MonoBehaviour
     public float DetectDistance;
     public float DetectHeight;
 
-    public float attackDistance = 1f;
+    public float attackDistance;
 
     public AudioSource _detectAudio;
     public Animator _anim;
+
+    public float attackSpeed;
+    public float attackTimer = 0;
 
     //calcular el angulo de vision
     private bool CheckAngle() {
@@ -41,23 +44,38 @@ public class BaseEnemy : MonoBehaviour
 
     //comprovar si el jugador esta dentro del rango de vision
     protected bool CheckPlayer() {
-
+        if (attackTimer > 0) {
+            attackTimer -= Time.deltaTime;
+        }
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, PlayerPos.position - transform.position, out hit, DetectDistance, 3))
+        if (Physics.Raycast(transform.position, PlayerPos.position - transform.position, out hit, DetectDistance))
         {
-            if (hit.collider.gameObject.CompareTag("Obstacle") || playerController.hidden)
+            Debug.Log(hit.collider.gameObject.tag);
+            if (hit.collider.gameObject.CompareTag("Obstacle"))
             {
+                _IA.isStopped = false;
                 return false;
             }
         }
         if (CheckAngle()) {
             if (CheckDistance()) {
-                if(Vector3.Distance(transform.position, PlayerPos.position) <= attackDistance){
-                    levelManager.ResetPlayer();
+                if (Vector3.Distance(transform.position, PlayerPos.position) <= attackDistance)
+                {
+                    _IA.isStopped = true;
+                    if (attackTimer <= 0)
+                    {
+                        playerController.TakeDamage();
+                        attackTimer = attackSpeed;
+                    }
                 }
+                else {
+                    _IA.isStopped = false;
+                }
+                return true;
             }
         }
-        return true;
+        _IA.isStopped = false;
+        return false;
     }
 
     //comprovar la distancia entre el jugador y el enemigo asi como la diferencia de altura
@@ -67,6 +85,7 @@ public class BaseEnemy : MonoBehaviour
     }
 
     public virtual void PlayerSpotted() {
+        _detectAudio.Play();
         _IA.SetDestination(PlayerPos.position);
         PlayerDetected = true;
         _anim.SetBool("PlayerDetected", true);
