@@ -80,4 +80,14 @@ public class StaticEnemy : BaseEnemy
     {
         base.PlayerSpotted();
     }
+
+    public override void Attack()
+    {
+        if (canAttack)
+        {
+            playerController.TakeDamage();
+            canAttack = false;
+            base.Attack();
+        }
+    }
 }

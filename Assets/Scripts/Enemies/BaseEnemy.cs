@@ -21,9 +21,21 @@ public class BaseEnemy : MonoBehaviour
 
     public AudioSource _detectAudio;
     public Animator _anim;
+    public bool _detected = false;
+
+    public bool _reloading;
+
+    public bool canAttack = true;
 
     public float attackSpeed;
-    public float attackTimer = 0;
+    public float attackTimer;
+
+    private void Update()
+    {
+        if (!CheckPlayer() && attackTimer < 1f) {
+            attackTimer = 1f;
+        }
+    }
 
     //calcular el angulo de vision
     private bool CheckAngle() {
@@ -44,13 +56,9 @@ public class BaseEnemy : MonoBehaviour
 
     //comprovar si el jugador esta dentro del rango de vision
     protected bool CheckPlayer() {
-        if (attackTimer > 0) {
-            attackTimer -= Time.deltaTime;
-        }
         RaycastHit hit;
         if (Physics.Raycast(transform.position, PlayerPos.position - transform.position, out hit, DetectDistance))
         {
-            Debug.Log(hit.collider.gameObject.tag);
             if (hit.collider.gameObject.CompareTag("Obstacle"))
             {
                 _IA.isStopped = false;
@@ -61,21 +69,41 @@ public class BaseEnemy : MonoBehaviour
             if (CheckDistance()) {
                 if (Vector3.Distance(transform.position, PlayerPos.position) <= attackDistance)
                 {
+                    _anim.SetBool("InRange", true);
                     _IA.isStopped = true;
-                    if (attackTimer <= 0)
-                    {
-                        playerController.TakeDamage();
-                        attackTimer = attackSpeed;
-                    }
+                    Attack();
+
                 }
-                else {
-                    _IA.isStopped = false;
+                else { 
+                    if (!_reloading)
+                    {
+                        _IA.isStopped = false;
+                    }
+                    _anim.SetBool("InRange", false);
                 }
                 return true;
             }
         }
-        _IA.isStopped = false;
+        if (!_reloading)
+        {
+            _IA.isStopped = false;
+        }
+
         return false;
+    }
+
+    public void StartReload() {
+        _IA.isStopped = true;
+        _reloading = true;
+        _anim.SetBool("Shooting", false);
+    }
+    public void EndReload() {
+        _reloading = false;
+        _anim.SetBool("Reload", false);
+    }
+    private IEnumerator Reload(float timer) {
+        yield return new WaitForSeconds(timer);
+        canAttack = true;
     }
 
     //comprovar la distancia entre el jugador y el enemigo asi como la diferencia de altura
@@ -85,8 +113,12 @@ public class BaseEnemy : MonoBehaviour
     }
 
     public virtual void PlayerSpotted() {
-        _detectAudio.Play();
-        _IA.SetDestination(PlayerPos.position);
+        if (!_detected)
+        {
+            _detectAudio.Play();
+            _detected = true;
+        }
+        GoToPosition(PlayerPos.position);
         PlayerDetected = true;
         _anim.SetBool("PlayerDetected", true);
     }
@@ -102,11 +134,20 @@ public class BaseEnemy : MonoBehaviour
                 {
                 
                 }
-                else { 
-                    _IA.SetDestination(PlayerPos.position);
+                else {
+                    GoToPosition(PlayerPos.position);
                 }
             }
         }
 
+    }
+
+    public void GoToPosition(Vector3 destination) {
+        if(!_reloading)
+            _IA.SetDestination(destination);
+    }
+
+    public virtual void Attack() {
+        StartCoroutine(Reload(attackTimer));
     }
 }

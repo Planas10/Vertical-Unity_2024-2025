@@ -15,7 +15,7 @@ public class PatrolEnemy : BaseEnemy
     {
         if (!_canvasManager.gameIsPaused)
         {
-            if (_IA.isStopped)
+            if (_IA.isStopped && !_reloading)
             {
                 _IA.isStopped = false;
             }
@@ -25,13 +25,17 @@ public class PatrolEnemy : BaseEnemy
             }
             else
             {
-                if (PlayerDetected)
+                if (PlayerDetected && !_reloading)
                 {
                     PlayerDetected = false;
+                    _anim.SetBool("InRange", false);
                     _anim.SetBool("PlayerDetected", false);
                     _IA.isStopped = false;
                     _IA.speed = 3.5f;
                     _IA.SetDestination(waypoints[_currentPoint].position);
+                }
+                if (_detected) {
+                    _detected = false;
                 }
             }
             if (!PlayerDetected)
@@ -64,6 +68,18 @@ public class PatrolEnemy : BaseEnemy
         if (PlayerDetected)
         {
             _IA.speed = 6;
+        }
+    }
+
+    public override void Attack() {
+        if (canAttack)
+        {
+            _anim.SetBool("Shooting", true);
+            _anim.SetBool("Reload", true);
+            playerController.TakeDamage();
+            canAttack = false;
+            _reloading = true;
+            base.Attack();
         }
     }
 }

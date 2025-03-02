@@ -385,7 +385,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6600016973207296340}
-  - component: {fileID: 6600016973198210696}
   m_Layer: 0
   m_Name: Soldier_demo
   m_TagString: Untagged
@@ -410,27 +409,6 @@ Transform:
   - {fileID: 6600016973207296342}
   m_Father: {fileID: 508985823046698123}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &6600016973198210696
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6600016973207586100}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
-  m_Controller: {fileID: 9100000, guid: c602fff8c5f2a7e47a172a6e935b3fc3, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6600016973207586102
 GameObject:
   m_ObjectHideFlags: 0
@@ -1186,6 +1164,7 @@ GameObject:
   - component: {fileID: 4007691687329855470}
   - component: {fileID: 7072996100375829343}
   - component: {fileID: 2844869780633325805}
+  - component: {fileID: 135837879152920058}
   m_Layer: 0
   m_Name: PatrolEnemy
   m_TagString: Untagged
@@ -1254,8 +1233,11 @@ MonoBehaviour:
   DetectHeight: 2
   attackDistance: 8
   _detectAudio: {fileID: 2844869780633325805}
-  _anim: {fileID: 6600016973198210696}
-  attackSpeed: 3
+  _anim: {fileID: 135837879152920058}
+  _detected: 0
+  _reloading: 0
+  attackSpeed: 0
+  attackTimer: 3.65
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -1378,3 +1360,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &135837879152920058
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9130440409754336112}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
+  m_Controller: {fileID: 9100000, guid: c602fff8c5f2a7e47a172a6e935b3fc3, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
