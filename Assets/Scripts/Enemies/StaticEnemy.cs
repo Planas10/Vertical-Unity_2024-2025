@@ -10,16 +10,20 @@ public class StaticEnemy : BaseEnemy
 
     private Vector3 _startpos;
 
+    private Quaternion InitRot;
+    private bool correctRot;
+
     private Quaternion startRotation;
     private Quaternion targetRotation;
     private bool rotatingToTarget = true;
 
-    public GameObject rotateTarget;
+    public Transform POVtransform;
 
     public CanvasManager _canvasManager;
 
     void Start()
     {
+        InitRot = transform.rotation;
         _startpos = transform.position;
         BeginRotation();
     }
@@ -42,14 +46,15 @@ public class StaticEnemy : BaseEnemy
                 {
                     PlayerDetected = false;
                     _anim.SetBool("PlayerDetected", false);
-                    _anim.SetBool("Returning", true);
+                    _anim.SetBool("InRange", false);
+                    _anim.SetBool("Attacking", false);
                     _IA.SetDestination(_startpos);
                 }
             }
             if (!PlayerDetected && Vector3.Distance(transform.position, _startpos) < 0.1f)
             {
                 Look();
-                _anim.SetBool("Returning", false);
+                _anim.SetBool("AtStart", true);
             }
         }
         else {
@@ -58,34 +63,43 @@ public class StaticEnemy : BaseEnemy
     }
 
     private void BeginRotation() {
-        targetAngle = Quaternion.Euler(transform.rotation.x, transform.rotation.y, transform.rotation.z).y - 45f;
-        startRotation = transform.rotation;
+        targetAngle = Quaternion.Euler(POVtransform.rotation.x, POVtransform.rotation.y, POVtransform.rotation.z).y - 45f;
+        startRotation = POVtransform.rotation;
         targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
     }
 
     private void Look() {
+        if (!correctRot) {
+            transform.rotation = InitRot;
+            correctRot = true;
+        }
+        if (rotatingToTarget){ POVtransform.rotation = Quaternion.Slerp(POVtransform.rotation, targetRotation, rotationSpeed * Time.deltaTime); }
+        else{ POVtransform.rotation = Quaternion.Slerp(POVtransform.rotation, startRotation, rotationSpeed * Time.deltaTime); }
 
-        if (rotatingToTarget){ transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime); }
-        else{ transform.rotation = Quaternion.Slerp(transform.rotation, startRotation, rotationSpeed * Time.deltaTime); }
-
-        if (Quaternion.Angle(transform.rotation, targetRotation) < 1f && rotatingToTarget){
+        if (Quaternion.Angle(POVtransform.rotation, targetRotation) < 1f && rotatingToTarget){
             rotatingToTarget = false;
         }
-        else if (Quaternion.Angle(transform.rotation, startRotation) < 1f && !rotatingToTarget){
+        else if (Quaternion.Angle(POVtransform.rotation, startRotation) < 1f && !rotatingToTarget){
             rotatingToTarget = true;
         }
+    }
+
+    public void DoDamage() {
+        playerController.TakeDamage();
     }
 
     public override void PlayerSpotted()
     {
         base.PlayerSpotted();
+        correctRot = false;
+        _anim.SetBool("AtStart", false);
     }
 
     public override void Attack()
     {
         if (canAttack)
         {
-            playerController.TakeDamage();
+            _anim.SetBool("Attacking", true);
             canAttack = false;
             base.Attack();
         }

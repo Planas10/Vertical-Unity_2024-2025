@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ButtonManager : MonoBehaviour
+public class OutlineManager : MonoBehaviour
 {
     public PlayerController controller;
     private GameObject lastSeen;
@@ -16,16 +16,20 @@ public class ButtonManager : MonoBehaviour
             {
                 lastSeen = controller.GetInteractable();
                 looking = true;
-                if (lastSeen.GetComponent<Button>().activated) {
+                if (lastSeen.GetComponent<Button>().activated)
+                {
                     lastSeen.GetComponent<Button>().looked = false;
                 }
-                else { 
+                else
+                {
                     lastSeen.GetComponent<Button>().looked = true;
                 }
             }
         }
-        else {
-            if(looking) {
+        else
+        {
+            if (looking)
+            {
                 lastSeen.GetComponent<Button>().looked = false;
             }
         }

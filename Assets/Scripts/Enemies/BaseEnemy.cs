@@ -80,6 +80,7 @@ public class BaseEnemy : MonoBehaviour
                         _IA.isStopped = false;
                     }
                     _anim.SetBool("InRange", false);
+                    _anim.SetBool("Attacking", false);
                 }
                 return true;
             }
@@ -95,7 +96,7 @@ public class BaseEnemy : MonoBehaviour
     public void StartReload() {
         _IA.isStopped = true;
         _reloading = true;
-        _anim.SetBool("Shooting", false);
+        _anim.SetBool("Attacking", false);
     }
     public void EndReload() {
         _reloading = false;

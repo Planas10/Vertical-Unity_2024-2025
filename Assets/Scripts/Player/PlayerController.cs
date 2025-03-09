@@ -136,6 +136,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
             CheckInteractable();
+            CheckGrappable();
             CheckCoyoteTime();
             Hook();
             CheckHidden();
@@ -207,7 +208,6 @@ public class PlayerController : MonoBehaviour
         MoveDirection = new Vector3(MoveDirection.x, _Mgravity, MoveDirection.z);
         MoveDirection = transform.TransformDirection(MoveDirection);
         _cc.Move(MoveDirection * _speed * Time.deltaTime);
-
         if (_grounded && !_footStepSound.isPlaying && _cc.velocity != Vector3.zero)
         {
             _footStepSound.Play();
@@ -239,6 +239,7 @@ public class PlayerController : MonoBehaviour
             }
         }
         playerVelocity.y += _gravity * Time.deltaTime;
+        Debug.Log(playerVelocity.y);
         _cc.Move(playerVelocity * Time.deltaTime);
     }
 
@@ -324,7 +325,10 @@ public class PlayerController : MonoBehaviour
                     _grappling = true;
                     _grounded = false;
                     _footStepSound.Stop();
+
+                    //if else
                     Vector3 posModifier = hit.collider.CompareTag("Grappable") ? Vector3.up * 5: Vector3.zero;
+
                     Vector3 adjustedPos = hit.collider.transform.position + posModifier;
                     Vector3 direction = adjustedPos - transform.position;
                     _cc.Move(direction * (_speed / 3f) * Time.deltaTime);
@@ -350,8 +354,10 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
         _grappling = false;
-        while (timerPostHook >= 0f && movePostHook) {
+        while (timerPostHook >= 0f && movePostHook)
+        {
             yield return null;
+            playerVelocity.y = -5f;
             _cc.Move(DestinationInertia * _speed * Time.deltaTime);
             timerPostHook -= Time.deltaTime;
         }
@@ -394,6 +400,18 @@ public class PlayerController : MonoBehaviour
         if (_inputs.actions["Interact"].WasPressedThisFrame()) {
             if(CheckInteractable() && !GetInteractable().GetComponent<Button>().activated) {
                 GetInteractable().GetComponent<Button>().activated = true;
+            }
+        }
+    }
+
+    public void CheckGrappable()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _hookRange))
+        {
+            if (hit.collider.CompareTag("Grappable"))
+            {
+                hit.collider.gameObject.GetComponent<Grappables>().looked = true;
             }
         }
     }

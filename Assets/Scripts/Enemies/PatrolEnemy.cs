@@ -11,6 +11,8 @@ public class PatrolEnemy : BaseEnemy
 
     public CanvasManager _canvasManager;
 
+    public AudioSource gunShoot;
+
     void Update()
     {
         if (!_canvasManager.gameIsPaused)
@@ -74,8 +76,9 @@ public class PatrolEnemy : BaseEnemy
     public override void Attack() {
         if (canAttack)
         {
-            _anim.SetBool("Shooting", true);
+            _anim.SetBool("Attacking", true);
             _anim.SetBool("Reload", true);
+            gunShoot.Play();
             playerController.TakeDamage();
             canAttack = false;
             _reloading = true;
