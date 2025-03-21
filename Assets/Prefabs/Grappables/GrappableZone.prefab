@@ -1,0 +1,593 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4200177033043986560
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1198937890004788160}
+  - component: {fileID: 5737455350043896740}
+  - component: {fileID: 1952887028422659633}
+  - component: {fileID: 4019378065418566903}
+  m_Layer: 0
+  m_Name: GrappableZone
+  m_TagString: Grappable
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1198937890004788160
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4200177033043986560}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.0000002980232, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 5665528351126042806}
+  - {fileID: 5755543537355706153}
+  - {fileID: 246135029299322309}
+  - {fileID: 8649075122465596188}
+  - {fileID: 5148551032157957054}
+  - {fileID: 2514384153232460108}
+  - {fileID: 227588904132382849}
+  - {fileID: 8910059946432762008}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5737455350043896740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4200177033043986560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 687a0511151f3f140b80d91cc0d0b466, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineScript: {fileID: 1952887028422659633}
+  looked: 0
+--- !u!114 &1952887028422659633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4200177033043986560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 4
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
+--- !u!65 &4019378065418566903
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4200177033043986560}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.300757, y: 2.07936, z: 0.28193647}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &567378072994943772
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1198937890004788160}
+    m_Modifications:
+    - target: {fileID: 5807790104775440408, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_Name
+      value: Catwalk Rails Short (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.8495674
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.00000408266
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70710784
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0000004060135
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.000000015454319
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.70710576
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+--- !u!4 &8910059946432762008 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+  m_PrefabInstance: {fileID: 567378072994943772}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1336536827224305100
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1198937890004788160}
+    m_Modifications:
+    - target: {fileID: 5941012914260658809, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_Name
+      value: Catwalk Rails Long (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.9998015
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -5.823922
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.0000011919744
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.000000021855694
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+--- !u!4 &5755543537355706153 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+  m_PrefabInstance: {fileID: 1336536827224305100}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1437661444577090131
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1198937890004788160}
+    m_Modifications:
+    - target: {fileID: 5941012914260658809, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_Name
+      value: Catwalk Rails Long
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.9998015
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.799139
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.0000011919744
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.000000021855694
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+--- !u!4 &5665528351126042806 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+  m_PrefabInstance: {fileID: 1437661444577090131}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2689834852784898553
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1198937890004788160}
+    m_Modifications:
+    - target: {fileID: 5941012914260658809, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_Name
+      value: Catwalk Rails Long (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.9998015
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -5.574357
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.0000011919744
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.000000021855694
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+--- !u!4 &8649075122465596188 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+  m_PrefabInstance: {fileID: 2689834852784898553}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4254227001713682490
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1198937890004788160}
+    m_Modifications:
+    - target: {fileID: 5807790104775440408, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_Name
+      value: Catwalk Rails Short
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.4495673
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.0000020561022
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70710784
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0000004060135
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.000000015454319
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.70710576
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+--- !u!4 &5148551032157957054 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+  m_PrefabInstance: {fileID: 4254227001713682490}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6789717340312698656
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1198937890004788160}
+    m_Modifications:
+    - target: {fileID: 5941012914260658809, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_Name
+      value: Catwalk Rails Long (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.9998015
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.5495734
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.0000011919744
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.000000021855694
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+--- !u!4 &246135029299322309 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+  m_PrefabInstance: {fileID: 6789717340312698656}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6817812228464495304
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1198937890004788160}
+    m_Modifications:
+    - target: {fileID: 5807790104775440408, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_Name
+      value: Catwalk Rails Short (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.749567
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.000003427009
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70710784
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0000004060135
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.000000015454319
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.70710576
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+--- !u!4 &2514384153232460108 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+  m_PrefabInstance: {fileID: 6817812228464495304}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &9174344739101315845
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1198937890004788160}
+    m_Modifications:
+    - target: {fileID: 5807790104775440408, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_Name
+      value: Catwalk Rails Short (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.549567
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.0000027117533
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70710784
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0000004060135
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.000000015454319
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.70710576
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+--- !u!4 &227588904132382849 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+  m_PrefabInstance: {fileID: 9174344739101315845}
+  m_PrefabAsset: {fileID: 0}

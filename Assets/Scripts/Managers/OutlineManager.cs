@@ -16,13 +16,17 @@ public class OutlineManager : MonoBehaviour
             {
                 lastSeen = controller.GetInteractable();
                 looking = true;
-                if (lastSeen.GetComponent<Button>().activated)
+                ButtonBase button = lastSeen.GetComponent<ButtonBase>();
+                if (button != null)
                 {
-                    lastSeen.GetComponent<Button>().looked = false;
-                }
-                else
-                {
-                    lastSeen.GetComponent<Button>().looked = true;
+                    if (button.activated)
+                    {
+                        button.looked = false;
+                    }
+                    else
+                    {
+                        button.looked = true;
+                    }
                 }
             }
         }
@@ -30,7 +34,10 @@ public class OutlineManager : MonoBehaviour
         {
             if (looking)
             {
-                lastSeen.GetComponent<Button>().looked = false;
+                ButtonBase button = lastSeen.GetComponent<ButtonBase>();
+                if (button != null) {
+                    button.looked = false;
+                }
             }
         }
     }

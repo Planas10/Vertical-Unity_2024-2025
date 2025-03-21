@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour
         }
         if (_inputs.actions["Run"].IsPressed() && !_isCrouched)
         {
-            _speed = 7f;
+            _speed = 10f;
             _running = true;
         }
         else
@@ -221,7 +221,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_inputs.actions["Jump"].WasPressedThisFrame()) {
             //Si esta en el suelo
-            if (_grounded)
+            if (_grounded && !_isCrouched)
             {
                 _jumpSound.Play();
                 playerVelocity.y += Mathf.Sqrt(_jumpForce * -2.0f * _gravity);
@@ -239,7 +239,6 @@ public class PlayerController : MonoBehaviour
             }
         }
         playerVelocity.y += _gravity * Time.deltaTime;
-        Debug.Log(playerVelocity.y);
         _cc.Move(playerVelocity * Time.deltaTime);
     }
 
@@ -318,6 +317,7 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _hookRange)) {
                 if (hit.collider.CompareTag("Grappable") || hit.collider.CompareTag("Grappable2")) {
                     particlemanager.HookImpactParticle(hit.collider.transform.position);
+                    Debug.Log(hit.collider.gameObject.transform.position);
                     _hookSound.Play();
                     _lr.enabled = true;
                     _lr.SetPosition(1, hit.point);
@@ -327,7 +327,7 @@ public class PlayerController : MonoBehaviour
                     _footStepSound.Stop();
 
                     //if else
-                    Vector3 posModifier = hit.collider.CompareTag("Grappable") ? Vector3.up * 5: Vector3.zero;
+                    Vector3 posModifier = hit.collider.CompareTag("Grappable") ? Vector3.up * 2: Vector3.zero;
 
                     Vector3 adjustedPos = hit.collider.transform.position + posModifier;
                     Vector3 direction = adjustedPos - transform.position;
@@ -348,7 +348,7 @@ public class PlayerController : MonoBehaviour
         float timerPostHook = 0.5f;
         Vector3 DestinationInertia = _cam.transform.forward;
         yield return null;
-        while (Vector3.Distance(transform.position, _destination) > 1)
+        while (Vector3.Distance(transform.position, _destination) > 2)
         {
             _cc.Move(_direction * (_speed / 3f) * Time.deltaTime);
             yield return null;
@@ -398,8 +398,8 @@ public class PlayerController : MonoBehaviour
     //Funcion para los interactuables
     public void Interact() {
         if (_inputs.actions["Interact"].WasPressedThisFrame()) {
-            if(CheckInteractable() && !GetInteractable().GetComponent<Button>().activated) {
-                GetInteractable().GetComponent<Button>().activated = true;
+            if(CheckInteractable() && !GetInteractable().GetComponent<ButtonBase>().activated) {
+                GetInteractable().GetComponent<ButtonBase>().activated = true;
             }
         }
     }

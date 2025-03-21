@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ParticleManager : MonoBehaviour
 {
-    public GameObject hookImpact;
+    public GameObject hookImpactParticles;
     public PlayerController Player;
 
     public void HookImpactParticle(Vector3 position) {
-        hookImpact.transform.position = position;
-        hookImpact.GetComponent<ParticleSystem>().Play();
+        hookImpactParticles.transform.position = position;
+        hookImpactParticles.GetComponent<ParticleSystem>().Play();
     }
 }

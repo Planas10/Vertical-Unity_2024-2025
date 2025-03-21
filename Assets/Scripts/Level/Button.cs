@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Button : MonoBehaviour
+public class Button : ButtonBase
 {
     public PlayerController pController;
     public Outline outlineScript;
 
     public AudioSource activateBTT;
 
-    public bool looked;
-    public bool activated;
+    public MeshRenderer thisMesh;
 
     public float timerBTT;
 
@@ -29,6 +28,7 @@ public class Button : MonoBehaviour
 
     public void ActivatedTime() {
         if (activated) {
+            thisMesh.material.color = Color.red;
             if (canPlay)
             {
                 canPlay = false;
@@ -40,6 +40,7 @@ public class Button : MonoBehaviour
 
     public IEnumerator DoorTimer() {
         yield return new WaitForSeconds(timerBTT);
+        thisMesh.material.color = Color.green;
         activated = false;
         canPlay = true;
     }

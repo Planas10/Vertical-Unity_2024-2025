@@ -1543,6 +1543,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvasManager: {fileID: 0}
+  _levelManager: {fileID: 0}
+  particlemanager: {fileID: 0}
   _landSound: {fileID: 9129196769197738396}
   _hookSound: {fileID: 4244722363636210561}
   _jumpSound: {fileID: 8062850675857049802}
@@ -1574,6 +1576,7 @@ MonoBehaviour:
   atrapado: 0
   win: 0
   _hasJumped: 0
+  hitpoints: 100
   placeholder: {fileID: 0}
 --- !u!54 &607546254472927797
 Rigidbody:
