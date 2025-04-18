@@ -104,10 +104,12 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         //Check if grounded
-        if ((_cc.collisionFlags & CollisionFlags.Below) != 0 && !_grounded)
+        RaycastHit groundHit;
+        if ((_cc.collisionFlags & CollisionFlags.Below) != 0 && !_grounded && Physics.Raycast(transform.position, Vector3.down, out groundHit, _cc.height / 2 + 0.1f))
         {
             _grounded = true;
-        } else if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero)
+        }
+        else if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero && !Physics.Raycast(transform.position, Vector3.down, out groundHit, _cc.height / 2 + 0.1f))
         {
             _grounded = false;
             _footStepSound.Stop();

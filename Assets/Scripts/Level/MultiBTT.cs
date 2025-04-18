@@ -15,11 +15,20 @@ public class MultiBTT : ButtonBase
 
     public MeshRenderer thisMesh;
 
+    private bool canPlay = true;
+
+
     private void Update()
     {
         AlternateOutline();
         if (activated) {
-            thisMesh.material.color = Color.red;
+            thisMesh.material.color = Color.green;
+            thisMesh.material.SetColor("_EmissionColor", Color.green);
+            if (canPlay)
+            {
+                canPlay = false;
+                activateBTT.Play();
+            }
             puerta.BotonActivado(indice);
             activated = false;
         }

@@ -5,22 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagment : MonoBehaviour
 {
-    public PlayerController _playerController;
     public CanvasManager _canvasManager;
 
     public GameObject _winLevelCanvas;
 
     public AudioSource _buttonSound;
 
-    private void Update()
-    {
-        if (_playerController.win)
-        {
-            WinCanvas();
-        }
-    }
-
-    private void WinCanvas() {
+    public void WinCanvas() {
         _winLevelCanvas.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         _canvasManager.gameIsPaused = true;

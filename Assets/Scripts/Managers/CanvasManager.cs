@@ -80,12 +80,6 @@ public class CanvasManager : MonoBehaviour
         PauseCanvas.SetActive(true);
     }
 
-    public void PauseMainMenu()
-    {
-        _buttonSound.Play();
-        SceneManager.LoadScene("MainMenu");
-    }
-
     public void ShowDamage() {
         damageCanvas.alpha = 1;
         StartCoroutine(ResetDamageCanvas());

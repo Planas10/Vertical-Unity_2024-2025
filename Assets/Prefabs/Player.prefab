@@ -1553,7 +1553,7 @@ MonoBehaviour:
   _cam: {fileID: 2155417144567436046}
   _inputs: {fileID: 8590424577891974652}
   _lr: {fileID: 7526727160627610107}
-  _gravity: -9.8
+  _gravity: -9
   _Mgravity: 0
   _speed: 0.05
   _grounded: 1
@@ -1564,7 +1564,7 @@ MonoBehaviour:
   _crouchHeight: 1
   _crouchCenter: -0.5
   _hookCooldown: 3
-  _hookRange: 15
+  _hookRange: 20
   _interactRange: 2
   _falling: 0
   _crouchTransform: {fileID: 1337589350819812259}

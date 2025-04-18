@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //Spawnpoints
 public class LevelManager : MonoBehaviour
@@ -9,6 +10,16 @@ public class LevelManager : MonoBehaviour
     private int currentSpawnIndex;
 
     public CharacterController characterController;
+    public SceneManagment scenemanagment;
+
+    public NextLvlBTT nextLvlBTT;
+
+    private void Update()
+    {
+        if (nextLvlBTT.CheckActivated()) {
+            NextLevel();
+        }
+    }
 
     private void Start()
     {
@@ -32,5 +43,14 @@ public class LevelManager : MonoBehaviour
         characterController.enabled = true;
     }
 
-
+    public void NextLevel() {
+        if (SceneManager.GetActiveScene().name == "Level1")
+        {
+            SceneManager.LoadScene("Level2");
+        }
+        else
+        {
+            scenemanagment.WinCanvas();
+        }
+    }
 }

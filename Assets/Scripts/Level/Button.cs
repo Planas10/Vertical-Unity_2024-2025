@@ -13,7 +13,7 @@ public class Button : ButtonBase
 
     public float timerBTT;
 
-    private bool canPlay;
+    private bool canPlay = true;
 
     private void Update()
     {
@@ -28,7 +28,8 @@ public class Button : ButtonBase
 
     public void ActivatedTime() {
         if (activated) {
-            thisMesh.material.color = Color.red;
+            thisMesh.material.color = Color.green;
+            thisMesh.material.SetColor("_EmissionColor", Color.green);
             if (canPlay)
             {
                 canPlay = false;
@@ -40,7 +41,7 @@ public class Button : ButtonBase
 
     public IEnumerator DoorTimer() {
         yield return new WaitForSeconds(timerBTT);
-        thisMesh.material.color = Color.green;
+        thisMesh.material.color = Color.red;
         activated = false;
         canPlay = true;
     }
