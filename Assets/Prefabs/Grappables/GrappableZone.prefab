@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Grappable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1198937890004788160
 Transform:
@@ -107,6 +107,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Catwalk Rails Short (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5807790104775440408, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.8495674
@@ -168,6 +172,10 @@ PrefabInstance:
     - target: {fileID: 5941012914260658809, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
       propertyPath: m_Name
       value: Catwalk Rails Long (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5941012914260658809, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -231,6 +239,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Catwalk Rails Long
       objectReference: {fileID: 0}
+    - target: {fileID: 5941012914260658809, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.9998015
@@ -292,6 +304,10 @@ PrefabInstance:
     - target: {fileID: 5941012914260658809, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
       propertyPath: m_Name
       value: Catwalk Rails Long (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5941012914260658809, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -355,6 +371,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Catwalk Rails Short
       objectReference: {fileID: 0}
+    - target: {fileID: 5807790104775440408, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.4495673
@@ -416,6 +436,10 @@ PrefabInstance:
     - target: {fileID: 5941012914260658809, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
       propertyPath: m_Name
       value: Catwalk Rails Long (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5941012914260658809, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6724887391528510181, guid: d142e75c30d4a9c41af672e3e800db70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -479,6 +503,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Catwalk Rails Short (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 5807790104775440408, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.749567
@@ -540,6 +568,10 @@ PrefabInstance:
     - target: {fileID: 5807790104775440408, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
       propertyPath: m_Name
       value: Catwalk Rails Short (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807790104775440408, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8969304628310705028, guid: 52f8b18b996d2b440b44c01546ab9c54, type: 3}
       propertyPath: m_LocalPosition.x

@@ -7,15 +7,7 @@ public class SceneManagment : MonoBehaviour
 {
     public CanvasManager _canvasManager;
 
-    public GameObject _winLevelCanvas;
-
     public AudioSource _buttonSound;
-
-    public void WinCanvas() {
-        _winLevelCanvas.SetActive(true);
-        Cursor.lockState = CursorLockMode.None;
-        _canvasManager.gameIsPaused = true;
-    }
 
     public void GoToSandbox() {
         _buttonSound.Play();

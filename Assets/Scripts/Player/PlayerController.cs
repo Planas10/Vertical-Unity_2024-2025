@@ -319,7 +319,6 @@ public class PlayerController : MonoBehaviour
             if (Physics.Raycast(_cam.transform.position, _cam.transform.forward, out hit, _hookRange)) {
                 if (hit.collider.CompareTag("Grappable") || hit.collider.CompareTag("Grappable2")) {
                     particlemanager.HookImpactParticle(hit.collider.transform.position);
-                    Debug.Log(hit.collider.gameObject.transform.position);
                     _hookSound.Play();
                     _lr.enabled = true;
                     _lr.SetPosition(1, hit.point);
@@ -426,6 +425,7 @@ public class PlayerController : MonoBehaviour
         }
         else {
             _levelManager.ResetPlayer();
+            hitpoints = 3;
         }
     }
 
@@ -461,22 +461,6 @@ public class PlayerController : MonoBehaviour
             {
                 //_rb.drag = 0.3f;
             }
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Wind"))
-        {
-            _Mgravity = -1f;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Wind"))
-        {
-            _Mgravity = 0f;
         }
     }
 }

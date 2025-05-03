@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Button : ButtonBase
@@ -42,6 +43,7 @@ public class Button : ButtonBase
     public IEnumerator DoorTimer() {
         yield return new WaitForSeconds(timerBTT);
         thisMesh.material.color = Color.red;
+        thisMesh.material.SetColor("_EmissionColor", Color.red);
         activated = false;
         canPlay = true;
     }

@@ -202,7 +202,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1251692845728410700}
-  - component: {fileID: 1251692845721240464}
   m_Layer: 0
   m_Name: Soldier_demo
   m_TagString: Untagged
@@ -228,27 +227,6 @@ Transform:
   - {fileID: 7432272301499286870}
   m_Father: {fileID: 510001638567544666}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1251692845721240464
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1251692845728641068}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
-  m_Controller: {fileID: 9100000, guid: ccace35b281eaaa4aa1fbfd66b9ee49e, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1251692845728641070
 GameObject:
   m_ObjectHideFlags: 0
@@ -1134,6 +1112,7 @@ GameObject:
   - component: {fileID: 1396319144840648280}
   - component: {fileID: 3063344079750117091}
   - component: {fileID: 813459635413954804}
+  - component: {fileID: 4643440564793739717}
   m_Layer: 0
   m_Name: StaticEnemy
   m_TagString: Untagged
@@ -1202,7 +1181,7 @@ MonoBehaviour:
   DetectHeight: 2
   attackDistance: 4
   _detectAudio: {fileID: 813459635413954804}
-  _anim: {fileID: 1251692845721240464}
+  _anim: {fileID: 4643440564793739717}
   _detected: 0
   _reloading: 0
   canAttack: 1
@@ -1329,6 +1308,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &4643440564793739717
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460103203330191119}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
+  m_Controller: {fileID: 9100000, guid: ccace35b281eaaa4aa1fbfd66b9ee49e, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3594363237999966062
 GameObject:
   m_ObjectHideFlags: 0

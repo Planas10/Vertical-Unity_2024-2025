@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CanvasManager : MonoBehaviour
 {
@@ -9,7 +10,6 @@ public class CanvasManager : MonoBehaviour
 
     public GameObject PauseCanvas;
     public GameObject PauseSettingsCanvas;
-    public GameObject HowToPlayCanvas;
 
     public AudioSource _buttonSound;
 
@@ -21,7 +21,6 @@ public class CanvasManager : MonoBehaviour
     {
         PauseCanvas.SetActive(false);
         PauseSettingsCanvas.SetActive(false);
-        HowToPlayCanvas.SetActive(false);
     }
 
     private void Update()
@@ -30,17 +29,6 @@ public class CanvasManager : MonoBehaviour
         {
             PauseGame();
         }
-        if (_playercontroller._inputs.actions["HowToPlay"].WasPressedThisFrame())
-        {
-            HowToPlay();
-        }
-    }
-
-    public void HowToPlay() {
-        _buttonSound.Play();
-        HowToPlayCanvas.SetActive(true);
-        Cursor.lockState = CursorLockMode.None;
-        gameIsPaused = true;
     }
 
     public void PauseGame()
@@ -49,13 +37,6 @@ public class CanvasManager : MonoBehaviour
         PauseCanvas.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         gameIsPaused = true;
-    }
-
-    public void CloseHTP() {
-        _buttonSound.Play();
-        HowToPlayCanvas.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        gameIsPaused = false;
     }
 
     public void ResumeGame()

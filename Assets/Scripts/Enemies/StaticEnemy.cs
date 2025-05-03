@@ -86,6 +86,7 @@ public class StaticEnemy : BaseEnemy
 
     public void DoDamage() {
         playerController.TakeDamage();
+
     }
 
     public override void PlayerSpotted()

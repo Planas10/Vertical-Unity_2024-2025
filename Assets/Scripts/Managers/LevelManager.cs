@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 //Spawnpoints
 public class LevelManager : MonoBehaviour
@@ -11,6 +12,10 @@ public class LevelManager : MonoBehaviour
 
     public CharacterController characterController;
     public SceneManagment scenemanagment;
+
+    public CanvasGroup CheckpointCanvas;
+
+    public AudioSource CheckpointAudio;
 
     public NextLvlBTT nextLvlBTT;
 
@@ -30,6 +35,19 @@ public class LevelManager : MonoBehaviour
         if (currentSpawnIndex < spawn)
         {
             currentSpawnIndex = spawn;
+            CheckpointAudio.Play();
+            CheckpointCanvas.alpha = 1;
+            StartCoroutine(CheckpointFade());
+        }
+    }
+
+    public IEnumerator CheckpointFade() {
+        float currentValue = 1;
+        while (currentValue > 0)
+        {
+            currentValue -= Time.deltaTime;
+            CheckpointCanvas.alpha = currentValue;
+            yield return null;
         }
     }
 
@@ -50,7 +68,7 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            scenemanagment.WinCanvas();
+            SceneManager.LoadScene("GameOver");
         }
     }
 }
