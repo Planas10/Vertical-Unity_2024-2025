@@ -197,11 +197,13 @@ public class PlayerController : MonoBehaviour
         {
             _speed = 10f;
             _running = true;
+            _footStepSound.pitch = 2f;
         }
         else
         {
             _speed = 5f;
             _running = false;
+            _footStepSound.pitch = 1f;
         }
         if (!_grounded && !_running && _cc.velocity.y < 0) {
             _speed = 5f;
