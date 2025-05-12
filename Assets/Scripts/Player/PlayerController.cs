@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     private CharacterController _cc;
     private CapsuleCollider _cC;
 
+    private float mouseSensibility;
+
     public float _gravity;
     public float _Mgravity;
 
@@ -80,8 +82,19 @@ public class PlayerController : MonoBehaviour
 
     public int hitpoints = 3;
 
+
+
+    public float radius = 0.5f;              // Radio del círculo alrededor de la base de la cápsula
+    public int rayCount = 8;                 // Número de rayos alrededor
+    public float rayLength;             // Longitud de los rayos
+    public LayerMask groundLayer;
+
+
+
     private void Awake()
     {
+        mouseSensibility = PlayerPrefs.GetFloat("SavedMouseSensitivity");
+
         reset = false;
         atrapado = false;
 
@@ -103,6 +116,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        mouseSensibility = PlayerPrefs.GetFloat("SavedMouseSensitivity");
+        CheckGround();
         //Check if grounded
         RaycastHit groundHit;
         if ((_cc.collisionFlags & CollisionFlags.Below) != 0 && !_grounded && Physics.Raycast(transform.position, Vector3.down, out groundHit, _cc.height / 2 + 0.1f))
@@ -156,14 +171,39 @@ public class PlayerController : MonoBehaviour
             var lookDirection = _inputs.actions["CamMovment"].ReadValue<Vector2>();
             var mouse = lookDirection * Time.deltaTime * 20f;
 
-            this.xRotation -= mouse.y;
-            this.yRotation += mouse.x;
-            this.xRotation = Mathf.Clamp(this.xRotation, -45f, 60f);
+            this.xRotation -= mouse.y * mouseSensibility;
+            this.yRotation += mouse.x * mouseSensibility;
+            this.xRotation = Mathf.Clamp(this.xRotation, -45f, 70f);
+
+            Debug.Log(PlayerPrefs.GetFloat("SavedMouseSensitivity"));
 
             _cam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
             if (_grappling)
             {
                 _lr.SetPosition(0, HookSpawn.position);
+            }
+        }
+    }
+
+    private void CheckGround() {
+        Vector3 center = transform.position; // Centro de la cápsula (usualmente está en el medio)
+        Vector3 bottom = center - new Vector3(0, _cC.height / 2f, 0); // Parte mas baja de la capsula
+
+        // Bucle para hacer los raycasts
+        for (int i = 0; i < rayCount; i++)
+        {
+            float angle = i * Mathf.PI * 2f / rayCount;
+            Vector3 offset = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
+            Vector3 origin = bottom + offset;
+
+            // Dibuja el rayo en la escena para depuración
+            Debug.DrawRay(origin, Vector3.down * rayLength, Color.red);
+
+            // Ejecuta el raycast
+            if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, rayLength))
+            {
+                if(hit.collider.CompareTag("Floor"))
+                    _grounded = true;
             }
         }
     }

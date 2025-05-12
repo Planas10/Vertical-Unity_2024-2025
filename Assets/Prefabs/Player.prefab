@@ -1564,19 +1564,25 @@ MonoBehaviour:
   _crouchHeight: 1
   _crouchCenter: -0.5
   _hookCooldown: 3
-  _hookRange: 20
+  _hookRange: 15
   _interactRange: 2
   _falling: 0
   _crouchTransform: {fileID: 1337589350819812259}
   HookSpawn: {fileID: 3851909611655087534}
   _hasHook: 0
-  _jumpForce: 2
+  _jumpForce: 1
   reset: 0
   hidden: 0
   atrapado: 0
   win: 0
   _hasJumped: 0
   hitpoints: 100
+  radius: 0.5
+  rayCount: 8
+  rayLength: 0.7
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
   placeholder: {fileID: 0}
 --- !u!54 &607546254472927797
 Rigidbody:
