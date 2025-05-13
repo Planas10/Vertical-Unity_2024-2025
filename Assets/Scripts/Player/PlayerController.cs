@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -82,18 +83,15 @@ public class PlayerController : MonoBehaviour
 
     public int hitpoints = 3;
 
-
-
-    public float radius = 0.5f;              // Radio del círculo alrededor de la base de la cápsula
-    public int rayCount = 8;                 // Número de rayos alrededor
-    public float rayLength;             // Longitud de los rayos
+    public float radius = 0.4f;
+    public int rayCount = 8;
+    public float rayLength;
     public LayerMask groundLayer;
-
 
 
     private void Awake()
     {
-        mouseSensibility = PlayerPrefs.GetFloat("SavedMouseSensitivity");
+        mouseSensibility = PlayerPrefs.GetFloat("SavedMouseSensitivity", 800f);
 
         reset = false;
         atrapado = false;
@@ -116,20 +114,19 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        mouseSensibility = PlayerPrefs.GetFloat("SavedMouseSensitivity");
-        CheckGround();
+        //cambiar sensibilidad camara segun la configuración
+        mouseSensibility = PlayerPrefs.GetFloat("SavedMouseSensitivity", 80f);
+
         //Check if grounded
-        RaycastHit groundHit;
-        if ((_cc.collisionFlags & CollisionFlags.Below) != 0 && !_grounded && Physics.Raycast(transform.position, Vector3.down, out groundHit, _cc.height / 2 + 0.1f))
+        CheckGround();
+        UseGrounded();
+
+        //Lo dejo por si peta algo al quitarlo
+        if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero)
         {
-            _grounded = true;
-        }
-        else if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero && !Physics.Raycast(transform.position, Vector3.down, out groundHit, _cc.height / 2 + 0.1f))
-        {
-            _grounded = false;
-            _footStepSound.Stop();
             _falling = false;
         }
+
 
         if (_grounded && playerVelocity.y < 0) {
             playerVelocity.y = 0f;
@@ -175,8 +172,6 @@ public class PlayerController : MonoBehaviour
             this.yRotation += mouse.x * mouseSensibility;
             this.xRotation = Mathf.Clamp(this.xRotation, -45f, 70f);
 
-            Debug.Log(PlayerPrefs.GetFloat("SavedMouseSensitivity"));
-
             _cam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
             if (_grappling)
             {
@@ -186,7 +181,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void CheckGround() {
-        Vector3 center = transform.position; // Centro de la cápsula (usualmente está en el medio)
+        Vector3 center = transform.position; // Centro de la cápsula
         Vector3 bottom = center - new Vector3(0, _cC.height / 2f, 0); // Parte mas baja de la capsula
 
         // Bucle para hacer los raycasts
@@ -202,9 +197,24 @@ public class PlayerController : MonoBehaviour
             // Ejecuta el raycast
             if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, rayLength))
             {
-                if(hit.collider.CompareTag("Floor"))
+                if (hit.collider.CompareTag("Floor"))
+                {
                     _grounded = true;
+                    Debug.Log(_grounded);
+                    break;
+                }
+                else{
+                    Debug.Log(_grounded);
+                    _grounded = false;
+                }
             }
+        }
+    }
+
+    private void UseGrounded() {
+        if (!_grounded && !_grappling) {
+            playerVelocity.y += _gravity * Time.deltaTime;
+            _cc.Move(playerVelocity * Time.deltaTime);
         }
     }
 
@@ -478,11 +488,10 @@ public class PlayerController : MonoBehaviour
         {
             if (_falling)
             {
+                Debug.Log("SUELO SUELO SUELO SUELO SUELO SUELO");
                 _landSound.Play();
                 _falling = false;
             }
-            _hasJumped = false;
-            _doubleJump = false;
         }
         if (_grappling)
         {

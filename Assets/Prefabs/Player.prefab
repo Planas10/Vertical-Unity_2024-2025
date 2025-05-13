@@ -1579,7 +1579,7 @@ MonoBehaviour:
   hitpoints: 100
   radius: 0.5
   rayCount: 8
-  rayLength: 0.7
+  rayLength: 0.58
   groundLayer:
     serializedVersion: 2
     m_Bits: 0

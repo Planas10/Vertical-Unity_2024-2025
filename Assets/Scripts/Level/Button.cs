@@ -14,6 +14,8 @@ public class Button : ButtonBase
 
     public float timerBTT;
 
+    private bool canActivate = true;
+
     private bool canPlay = true;
 
     private void Update()
@@ -28,7 +30,7 @@ public class Button : ButtonBase
     }
 
     public void ActivatedTime() {
-        if (activated) {
+        if (activated && canActivate) {
             thisMesh.material.color = Color.green;
             thisMesh.material.SetColor("_EmissionColor", Color.green);
             if (canPlay)
@@ -36,6 +38,7 @@ public class Button : ButtonBase
                 canPlay = false;
                 activateBTT.Play();
             }
+            canActivate = false;
             StartCoroutine(DoorTimer());
         }
     }
@@ -45,6 +48,7 @@ public class Button : ButtonBase
         thisMesh.material.color = Color.red;
         thisMesh.material.SetColor("_EmissionColor", Color.red);
         activated = false;
+        canActivate = true;
         canPlay = true;
     }
 }

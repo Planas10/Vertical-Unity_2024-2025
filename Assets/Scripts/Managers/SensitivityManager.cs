@@ -10,7 +10,7 @@ public class SensitivityManager : MonoBehaviour
 
     private void Start()
     {
-        SetSensitivity(PlayerPrefs.GetFloat("SavedMouseSensitivity", 50));
+        SetSensitivity(PlayerPrefs.GetFloat("SavedMouseSensitivity", 800));
     }
 
     public void SetSensitivity(float _value)

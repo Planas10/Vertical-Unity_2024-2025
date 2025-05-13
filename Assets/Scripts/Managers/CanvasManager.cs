@@ -33,10 +33,13 @@ public class CanvasManager : MonoBehaviour
 
     public void PauseGame()
     {
-        _buttonSound.Play();
-        PauseCanvas.SetActive(true);
-        Cursor.lockState = CursorLockMode.None;
-        gameIsPaused = true;
+        if (!gameIsPaused)
+        {
+            _buttonSound.Play();
+            PauseCanvas.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            gameIsPaused = true;
+        }
     }
 
     public void ResumeGame()
