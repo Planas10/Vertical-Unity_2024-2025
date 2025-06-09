@@ -117,13 +117,16 @@ public class PlayerController : MonoBehaviour
         //cambiar sensibilidad camara segun la configuración
         mouseSensibility = PlayerPrefs.GetFloat("SavedMouseSensitivity", 80f);
 
-        //Check if grounded
-        CheckGround();
-        UseGrounded();
-
         //Lo dejo por si peta algo al quitarlo
-        if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero)
+        RaycastHit groundHit;
+        if ((_cc.collisionFlags & CollisionFlags.Below) != 0 && !_grounded && Physics.Raycast(transform.position, Vector3.down, out groundHit, _cc.height / 2 + 0.1f))
         {
+            _grounded = true;
+        }
+        else if (_grounded && (_cc.collisionFlags & CollisionFlags.Below) == 0 && _cc.velocity != Vector3.zero && !Physics.Raycast(transform.position, Vector3.down, out groundHit, _cc.height / 2 + 0.1f))
+        {
+            _grounded = false;
+            _footStepSound.Stop();
             _falling = false;
         }
 
@@ -177,44 +180,6 @@ public class PlayerController : MonoBehaviour
             {
                 _lr.SetPosition(0, HookSpawn.position);
             }
-        }
-    }
-
-    private void CheckGround() {
-        Vector3 center = transform.position; // Centro de la cápsula
-        Vector3 bottom = center - new Vector3(0, _cC.height / 2f, 0); // Parte mas baja de la capsula
-
-        // Bucle para hacer los raycasts
-        for (int i = 0; i < rayCount; i++)
-        {
-            float angle = i * Mathf.PI * 2f / rayCount;
-            Vector3 offset = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
-            Vector3 origin = bottom + offset;
-
-            // Dibuja el rayo en la escena para depuración
-            Debug.DrawRay(origin, Vector3.down * rayLength, Color.red);
-
-            // Ejecuta el raycast
-            if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, rayLength))
-            {
-                if (hit.collider.CompareTag("Floor"))
-                {
-                    _grounded = true;
-                    Debug.Log(_grounded);
-                    break;
-                }
-                else{
-                    Debug.Log(_grounded);
-                    _grounded = false;
-                }
-            }
-        }
-    }
-
-    private void UseGrounded() {
-        if (!_grounded && !_grappling) {
-            playerVelocity.y += _gravity * Time.deltaTime;
-            _cc.Move(playerVelocity * Time.deltaTime);
         }
     }
 
@@ -278,7 +243,7 @@ public class PlayerController : MonoBehaviour
             if (_grounded && !_isCrouched)
             {
                 _jumpSound.Play();
-                playerVelocity.y += Mathf.Sqrt(_jumpForce * -2.0f * _gravity);
+                playerVelocity.y += Mathf.Sqrt(_jumpForce * -3.0f * _gravity);
                 _hasJumped = true;
                 _grounded = false;
                 _footStepSound.Stop();
@@ -492,6 +457,8 @@ public class PlayerController : MonoBehaviour
                 _landSound.Play();
                 _falling = false;
             }
+            _hasJumped = false;
+            _doubleJump = false;
         }
         if (_grappling)
         {

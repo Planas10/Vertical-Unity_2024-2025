@@ -1553,7 +1553,7 @@ MonoBehaviour:
   _cam: {fileID: 2155417144567436046}
   _inputs: {fileID: 8590424577891974652}
   _lr: {fileID: 7526727160627610107}
-  _gravity: -9
+  _gravity: -18
   _Mgravity: 0
   _speed: 0.05
   _grounded: 1
